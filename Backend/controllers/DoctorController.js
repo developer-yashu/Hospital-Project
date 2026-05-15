@@ -3,23 +3,21 @@ const Doctor = require("../models/Doctor.Model");
 const User = require("../models/userModel");
 const sendMail = require("../utils/sendMail");
 const bcrypt = require("bcrypt");
-const upload=require('../utils/Cloudinary')
+const upload = require('../utils/Cloudinary')
 
 exports.addDoctor = async (req, res) => {
     try {
         // console.log(">>>>>>>>>>",req.body);
         // console.log(">>>>>>>>>>files",req.files);
-        const uploaddata= await upload.uploadImage(req.files)
+        const uploaddata = await upload.uploadImage(req.files)
         // console.log("uploaddata>>>>>>>>",uploaddata);
         const image = uploaddata[0].url;
         // console.log("image>>>>>>>>",image);
 
-        
-// npm i express-fileupload
-        // return
+
         const { name, email, phone, experience, gender, age, qualification, address, role, departmentId, subDepartmentId } = req.body;
         if (!(name && email && phone && experience && gender && age && qualification && address && departmentId && subDepartmentId)) {
-         return   res.status(404).json({ message: "all filede required", });
+          return res.status(400).json({ message: "all filede required", });
         }
         const existingEmail = await Doctor.findOne({ email });
         if (existingEmail) {
@@ -28,11 +26,12 @@ exports.addDoctor = async (req, res) => {
 
         const doctor = await new Doctor({
             name, email, phone, experience, gender, age,
-            qualification, address, role, departmentId, subDepartmentId,image, status: "pending"
+            qualification, address, role, departmentId, subDepartmentId, image, status: "pending"
         });
         console.log('doctor>>>>>', doctor);
 
         await doctor.save();
+         console.log("SAVE SUCCESS");
         res.status(201).json({ message: "doctor  submitted", doctor });
     } catch (error) {
         res.status(500).json({ message: error.message })

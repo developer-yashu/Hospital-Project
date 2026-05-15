@@ -1,5 +1,4 @@
 {
-<<<<<<< HEAD
   "name": "frontend",
   "private": true,
   "version": "0.0.0",
@@ -26,30 +25,7 @@
     "eslint": "^10.3.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
-    "globals": "^17.6.0",
-    "vite": "^8.0.12"
-=======
-  "name": "backend",
-  "version": "1.0.0",
-  "main": "server.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "server": "nodemon server.js"
-  },
-  "author": "",
-  "license": "ISC",
-  "description": "",
-  "dependencies": {
-    "bcrypt": "^6.0.0",
-    "cloudinary": "^2.10.0",
-    "cors": "^2.8.6",
-    "express": "^5.2.1",
-    "express-fileupload": "^1.5.2",
-    "jsonwebtoken": "^9.0.3",
-    "mongoose": "^9.6.2",
-    "nodemailer": "^8.0.7",
-    "nodemon": "^3.1.14",
-    "uuid": "^14.0.0"
->>>>>>> ee6710b7dd18a45c99c4f9b03cc194d2c0e2ca7b
-  }
+    "globals": "^17.6.0"
+
+}
 }
