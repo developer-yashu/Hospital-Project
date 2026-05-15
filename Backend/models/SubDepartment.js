@@ -15,6 +15,6 @@ const SubdepartmentSchema = new mongoose.Schema({
         ref: "Department"
     },
 
-}, { timestamps: true });
+}, { timestamps: true ,versionKey: false });
 
 module.exports = mongoose.model("SubDepartment", SubdepartmentSchema);

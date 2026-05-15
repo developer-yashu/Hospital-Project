@@ -12,7 +12,7 @@ const doctorSchema = new mongoose.Schema(
         },
         phone: {
             type: Number,
-            required: true
+            required:true
         },
         experience: {
             type: Number,
@@ -39,6 +39,10 @@ const doctorSchema = new mongoose.Schema(
             type: mongoose.Schema.Types.ObjectId,
             ref: "SubDepartment",
         },
+        hospitalId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Hospital",
+        },
 
         departmentId: {
             type: mongoose.Schema.Types.ObjectId,
@@ -46,19 +50,19 @@ const doctorSchema = new mongoose.Schema(
         },
         role: {
             type: String,
-            required: true
+            default: "Doctor"
         },
-        image:{
-            type: String,
-            required: true
-        },
+        // image:{
+        //     type: String,
+        //     // required: true
+        // },
         status: {
             type: String,
-            enum: ["pending", "approved", "rejected"],
-            default: "pending"
+            enum: [ "active", "inactive"],
+            default: "active"
         },
     },
-    { timestamps: true }
+    { timestamps: true,versionKey: false }
 );
 
 module.exports = mongoose.model("Doctor", doctorSchema);

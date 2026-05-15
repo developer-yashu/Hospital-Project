@@ -14,7 +14,7 @@ const Port=1010;
 app.use(express.json());
 app.use(cors());
 app.use(fileUpload());
-app.use(express.urlencoded());
+app.use(express.urlencoded({ extended: true }));
 
 
 const route=require('./routes/superadminRoutes')

@@ -71,7 +71,7 @@ const hospitalSchema = new mongoose.Schema({
    }
 
 
-}, { timestamps: true });
+}, { timestamps: true ,versionKey: false });
 
 module.exports = mongoose.model("Hospital", hospitalSchema);
 

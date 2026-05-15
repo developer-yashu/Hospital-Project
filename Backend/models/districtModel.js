@@ -22,6 +22,6 @@ const districtSchema = new mongoose.Schema({
       default: "active"
    }
 
-}, { timestamps: true })
+}, { timestamps: true ,versionKey: false });
 
 module.exports = mongoose.model("District", districtSchema)

@@ -13,8 +13,8 @@ router.get("/get-all-Doctor",DoctorController.getdoctors);
 router.get("/get-One-Doctor/:id",DoctorController.getOnedoctors);
 router.put("/update-Doctor/:id", DoctorController.updateDoctor);
 
-router.put("/approve-Doctor/:id",DoctorController.approveDoctors);
-router.put("/rejected-Doctor/:id", DoctorController.RejectedDoctors);
+router.put("/soft-Delete-Doctor/:id",DoctorController.softDelete);
+router.put("/restore-Doctor/:id", DoctorController.restore);
 
 router.delete("/delete-Doctor/:id", DoctorController.deletedoctor);
 

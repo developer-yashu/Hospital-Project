@@ -15,6 +15,6 @@ const departmentSchema = new mongoose.Schema({
         ref: "Hospital",
     }
 
-}, { timestamps: true });
+}, { timestamps: true ,versionKey: false });
 
 module.exports = mongoose.model("Department", departmentSchema);

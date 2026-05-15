@@ -29,6 +29,6 @@ const superAdminSchema = new mongoose.Schema({
         type: String,
         default: "superadmin",
     },
-});
+},{ timestamps: true,versionKey: false });
 
 module.exports = mongoose.model("SuperAdmin", superAdminSchema);

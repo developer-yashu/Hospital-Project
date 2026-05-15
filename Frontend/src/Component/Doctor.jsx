@@ -12,6 +12,8 @@ const Doctor = () => {
   const [doctors, setDoctors] = useState([]);
 
   const [departments, setDepartments] = useState([]);
+  const [hospitals, setHospitals] = useState([]);
+
   const [subDepartments, setSubDepartments] = useState([]);
 
   // updatePopup
@@ -33,6 +35,7 @@ const Doctor = () => {
   const [age, setAge] = useState("");
   const [qualification, setQualification] = useState("");
   const [address, setAddress] = useState("");
+  const [hospitalId, setHospitalId] = useState("");
   const [departmentId, setDepartmentId] = useState("");
   const [subDepartmentId, setSubDepartmentId] = useState("");
 
@@ -44,6 +47,17 @@ const Doctor = () => {
       );
 
       setDoctors(res.data.doctors);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getHospitals = async () => {
+    try {
+      const res = await axios.get(
+        "http://127.0.0.1:1010/Hospital/get-all-hospital",
+      );
+      setHospitals(res.data.hospitals);
     } catch (error) {
       console.log(error);
     }
@@ -88,6 +102,7 @@ const Doctor = () => {
       qualification,
       address,
       role: "doctor",
+      hospitalId,
       departmentId,
       subDepartmentId,
     };
@@ -112,6 +127,7 @@ const Doctor = () => {
       setAge("");
       setQualification("");
       setAddress("");
+      setHospitalId("");
       setDepartmentId("");
       setSubDepartmentId("");
 
@@ -136,24 +152,27 @@ const Doctor = () => {
   };
 
   // soft delete
-  const approveDoctor  = async (id) => {
+  const softDeleteDoctor = async (id) => {
     try {
-     const res= await axios.put(`http://127.0.0.1:1010/Doctor/approve-Doctor/${id}`);
-            alert(res.data.message);
+      const res = await axios.put(
+        `http://127.0.0.1:1010/Doctor/soft-Delete-Doctor/${id}`,
+      );
 
+      alert(res.data.message);
       getDoctors();
     } catch (error) {
-      alert(error.response?.data?.message);
-
-        console.log(error);
+      console.log(error);
     }
   };
 
   // restore
-  const rejectDoctor  = async (id) => {
+  const restoreDoctor = async (id) => {
     try {
-    const res= await axios.put(`http://127.0.0.1:1010/Doctor/rejected-Doctor/${id}`);
-  alert(res.data.message);
+      const res = await axios.put(
+        `http://127.0.0.1:1010/Doctor/restore-Doctor/${id}`,
+      );
+
+      alert(res.data.message);
       getDoctors();
     } catch (error) {
       console.log(error);
@@ -163,14 +182,16 @@ const Doctor = () => {
   // get-One-Doctor
   const getOneDoctor = async (id) => {
     try {
+      console.log(id);
       const res = await axios.get(
         `http://127.0.0.1:1010/Doctor/get-One-Doctor/${id}`,
       );
-      console.log(res.data.doctor);
+      console.log(res.data);
       setSingleDoctor(res.data.doctor);
       setViewPopup(true);
     } catch (error) {
       console.log(error);
+      alert(error.response.data.message);
     }
   };
 
@@ -187,6 +208,7 @@ const Doctor = () => {
       age,
       qualification,
       address,
+      hospitalId,
       departmentId,
       subDepartmentId,
     };
@@ -211,6 +233,7 @@ const Doctor = () => {
     getDoctors();
     getDepartments();
     getSubDepartments();
+    getHospitals();
   }, []);
 
   return (
@@ -244,6 +267,28 @@ const Doctor = () => {
             {/* ACTIONS */}
             <div className="absolute top-2 right-2 flex gap-2">
               <button
+                onClick={() => {
+                  setEditId(item._id);
+                  setName(item.name);
+                  setEmail(item.email);
+                  setPhone(item.phone);
+                  setExperience(item.experience);
+                  setGender(item.gender);
+                  setAge(item.age);
+                  setQualification(item.qualification);
+                  setAddress(item.address);
+                  setHospitalId(item.hospitalId?._id);
+                  setDepartmentId(item.departmentId?._id);
+                  setSubDepartmentId(item.subDepartmentId?._id);
+
+                  setUpdatePopup(true);
+                }}
+                className="text-yellow-500"
+              >
+                ✏️
+              </button>
+
+              <button
                 onClick={() => getOneDoctor(item._id)}
                 className="text-green-500"
               >
@@ -257,19 +302,19 @@ const Doctor = () => {
                 🗑
               </button>
 
-              {item.status === "approved" ? (
+              {item.status === "active" ? (
                 <button
-                  onClick={() => rejectDoctor (item._id)}
-                  className="text-blue-500"
+                  onClick={() => softDeleteDoctor(item._id)}
+                  className="text-red-500"
                 >
-                  🔄
+                  🚫
                 </button>
               ) : (
                 <button
-                  onClick={() => approveDoctor (item._id)}
-                  className="text-gray-600"
+                  onClick={() => restoreDoctor(item._id)}
+                  className="text-green-500"
                 >
-                  🚫
+                  🔄
                 </button>
               )}
             </div>
@@ -287,6 +332,9 @@ const Doctor = () => {
 
             <p className="text-gray-500">
               Qualification : {item.qualification}
+            </p>
+            <p className="text-gray-500">
+              Hospital : {item.hospitalId?.hospitalName}
             </p>
 
             <p className="text-gray-500">
@@ -460,6 +508,26 @@ const Doctor = () => {
                 />
               </div>
 
+              <div>
+                <label className="block mb-1 font-semibold text-gray-700">
+                  Hospital
+                </label>
+
+                <select
+                  className="w-full border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none p-3 rounded-xl"
+                  value={hospitalId}
+                  onChange={(e) => setHospitalId(e.target.value)}
+                >
+                  <option value="">Select Hospital</option>
+
+                  {hospitals?.map((item) => (
+                    <option key={item._id} value={item._id}>
+                      {item.hospitalName}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
               {/* DEPARTMENT */}
               <div className="mt-4">
                 <label className="block mb-1 font-semibold text-gray-700">
@@ -527,34 +595,145 @@ const Doctor = () => {
       )}
 
       {/* VIEW POPUP */}
-{viewPopup && singleDoctor && (
+      {viewPopup && singleDoctor && (
+        <div className="fixed inset-0 bg-black/60 flex justify-center items-center z-50 p-4">
+          <div className="bg-white w-full max-w-md rounded-3xl shadow-2xl p-6">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-3xl font-bold">👨‍⚕ Doctor Details</h2>
+
+              <button
+                onClick={() => setViewPopup(false)}
+                className="text-red-500 text-4xl"
+              >
+                ×
+              </button>
+            </div>
+            <div className="space-y-3">
+              <p>
+                <b>Name :</b> {singleDoctor.name}
+              </p>
+              <p>
+                <b>Email :</b> {singleDoctor.email}
+              </p>
+              <p>
+                <b>Phone :</b> {singleDoctor.phone}
+              </p>
+              <p>
+                <b>Gender :</b> {singleDoctor.gender}
+              </p>
+              <p>
+                <b>Experience :</b> {singleDoctor.experience}
+              </p>
+              <p>
+                <b>Qualification :</b> {singleDoctor.qualification}
+              </p>
+              <p>
+                <b>Address :</b> {singleDoctor.address}
+              </p>
+              <p>
+                <b>Department :</b> {singleDoctor.departmentId?.departmentName}
+              </p>
+              <p>
+                <b>Sub Department :</b>{" "}
+                {singleDoctor.subDepartmentId?.SubdepartmentName}
+              </p>
+              <p>
+                <b>Status :</b> {singleDoctor.status}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+
+      {/* UPDATE POPUP */}
+{updatePopup && (
   <div className="fixed inset-0 bg-black/60 flex justify-center items-center z-50 p-4">
-    <div className="bg-white w-full max-w-md rounded-3xl shadow-2xl p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-3xl font-bold">👨‍⚕ Doctor Details</h2>
+    <div className="bg-white w-full max-w-2xl rounded-3xl shadow-2xl p-6">
+
+      <div className="flex justify-between items-center mb-5">
+        <h2 className="text-2xl font-bold">✏️ Update Doctor</h2>
 
         <button
-          onClick={() => setViewPopup(false)}
-          className="text-red-500 text-4xl">
+          onClick={() => setUpdatePopup(false)}
+          className="text-red-500 text-3xl"
+        >
           ×
         </button>
+      </div>
 
-      </div>
-      <div className="space-y-3">
-        <p><b>Name :</b> {singleDoctor.name}</p>
-        <p><b>Email :</b> {singleDoctor.email}</p>
-        <p><b>Phone :</b> {singleDoctor.phone}</p>
-        <p><b>Gender :</b> {singleDoctor.gender}</p>
-        <p><b>Experience :</b> {singleDoctor.experience}</p>
-        <p><b>Qualification :</b> {singleDoctor.qualification}</p>
-        <p><b>Address :</b> {singleDoctor.address}</p>
-        <p><b>Department :</b>{" "}{singleDoctor.departmentId?.departmentName}</p>
-        <p><b>Sub Department :</b>{" "}{singleDoctor.subDepartmentId?.SubdepartmentName}</p>
-        <p><b>Status :</b>{" "}{singleDoctor.status}</p>
-      </div>
+      <form
+        onSubmit={updateDoctor}
+        className="grid grid-cols-1 md:grid-cols-2 gap-4"
+      >
+
+        <input
+          type="text"
+          placeholder="Name"
+          className="border p-3 rounded-xl"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+
+        <input
+          type="email"
+          placeholder="Email"
+          className="border p-3 rounded-xl"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+
+        <input
+          type="number"
+          placeholder="Phone"
+          className="border p-3 rounded-xl"
+          value={phone}
+          onChange={(e) => setPhone(e.target.value)}
+        />
+
+        <input
+          type="number"
+          placeholder="Experience"
+          className="border p-3 rounded-xl"
+          value={experience}
+          onChange={(e) => setExperience(e.target.value)}
+        />
+
+        <input
+          type="number"
+          placeholder="Age"
+          className="border p-3 rounded-xl"
+          value={age}
+          onChange={(e) => setAge(e.target.value)}
+        />
+
+        <input
+          type="text"
+          placeholder="Qualification"
+          className="border p-3 rounded-xl"
+          value={qualification}
+          onChange={(e) => setQualification(e.target.value)}
+        />
+
+        <textarea
+          placeholder="Address"
+          className="border p-3 rounded-xl md:col-span-2"
+          value={address}
+          onChange={(e) => setAddress(e.target.value)}
+        />
+
+        <button
+          type="submit"
+          className="bg-blue-600 text-white py-3 rounded-xl md:col-span-2"
+        >
+          Update Doctor
+        </button>
+
+      </form>
     </div>
   </div>
 )}
+
 
       {/* SIDEBAR BG */}
       {showSidebar && (

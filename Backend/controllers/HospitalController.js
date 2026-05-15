@@ -1,7 +1,7 @@
 const Hospital = require("../models/HospitalModel");
 const User = require("../models/userModel");
 const sendMail = require("../utils/sendMail");
-// import { v4 as uuidv4 } from "uuid";
+const { v4: uuidv4 } = require("uuid");
 
 
 const bcrypt = require("bcrypt");
@@ -99,10 +99,10 @@ exports.approveHospital = async (req, res) => {
       return res.status(400).json({ message: "Already approved" });
     }
 
-    const randomPassword = Math.random().toString(36).slice(-8);
+     const randomPassword = uuidv4().slice(0, 8);
     const hashedPassword = await bcrypt.hash(randomPassword, 10);
 
-    const user = await User.create({
+    const user = await new User({
       name: hospital.hospitalName,
       email: hospital.hospitalEmail,
       phone: hospital.hospitalPhone,

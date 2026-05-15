@@ -35,7 +35,7 @@ const userSchema = new mongoose.Schema({
         ref: "Hospital",
     }
 },
-    { timestamps: true }
+    { timestamps: true,versionKey: false }
 );
 
 module.exports = mongoose.model("User", userSchema);
