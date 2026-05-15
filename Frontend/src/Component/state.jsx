@@ -118,245 +118,210 @@ const State = () => {
     apiget();
   }, []);
 
-  return (
-    <div className="p-6 bg-gray-100 min-h-screen">
-      {/* HEADER */}
+ return (
+  <div className="p-6 min-h-screen bg-gray-50">
 
-      <div className="flex justify-between items-center mb-6">
+    {/* TOP BAR */}
+    <div className="flex items-center justify-between mb-6 gap-4">
+      <div className="flex items-center gap-3">
+
+        {/* SIDEBAR TOGGLE */}
         <button
           onClick={() => setShowSidebar(true)}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl shadow-lg"
+          className="flex items-center gap-2 px-4 py-2 text-sm border border-gray-200 rounded-lg text-gray-600 hover:bg-gray-100 transition"
         >
-          Sidebar
+          <span className="text-lg">☰</span> Menu
         </button>
-        {/* BACKDROP */}
-        {showSidebar && (
-          <div
-            onClick={() => setShowSidebar(false)}
-            className="fixed inset-0 bg-black/40 z-40"
-          ></div>
-        )}
 
-        
-        <div
-          className={`fixed top-0 left-0 h-full w-[320px] bg-white shadow-2xl z-50 transform transition-transform duration-300 ${
-            showSidebar ? "translate-x-0" : "-translate-x-full"
-          }`}
-        >
-          {/* HEADER */}
-          <div className="flex justify-between items-center p-5 border-b">
-            <h2 className="text-2xl font-bold text-gray-800">Add Location</h2>
+        <h1 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
+          📍 All states
+        </h1>
+      </div>
 
-            <button
-              onClick={() => setShowSidebar(false)}
-              className="text-red-500 text-3xl font-bold"
-            >
-              ×
-            </button>
-          </div>
+      {/* ADD BUTTON */}
+      <button
+        onClick={() => { setShowPopup(true); setEditId(null); setStateName(""); }}
+        className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 text-sm rounded-lg transition"
+      >
+        + Add state
+      </button>
+    </div>
 
-          {/* MENU */}
-          <div className="p-5 flex flex-col gap-4">
-            <button
-              onClick={() => {
-                navigate("/state");
-              }}
-              className="bg-black hover:bg-gray-800 text-white py-3 rounded-xl transition"
-            >
-              State
-            </button>
+    {/* BACKDROP */}
+    {showSidebar && (
+      <div
+        onClick={() => setShowSidebar(false)}
+        className="fixed inset-0 bg-black/40 z-40"
+      />
+    )}
 
-            <button
-              onClick={() => {
-                navigate("/district");
-              }}
-              className="bg-black hover:bg-gray-800 text-white py-3 rounded-xl transition"
-            >
-              District
-            </button>
-
-            <button
-              onClick={() => {
-                navigate("/city");
-              }}
-              className="bg-black hover:bg-gray-800 text-white py-3 rounded-xl transition"
-            >
-              City
-            </button>
-
-            <button
-              onClick={() => {
-                navigate("/gethospital");
-              }}
-              className="bg-black hover:bg-gray-800 text-white py-3 rounded-xl transition"
-            >
-              Hospital
-            </button>
-          </div>
-        </div>
-
-        <h1 className="text-3xl font-bold text-gray-800">📍 All States</h1>
+    {/* SIDEBAR */}
+    <div className={`fixed top-0 left-0 h-full w-64 bg-white border-r border-gray-100 z-50 flex flex-col transform transition-transform duration-300 ${showSidebar ? "translate-x-0" : "-translate-x-full"}`}>
+      <div className="flex items-center justify-between px-4 py-4 border-b border-gray-100">
+        <h2 className="text-base font-semibold text-gray-800">Add location</h2>
         <button
-          onClick={() => {
-            setShowPopup(true);
-            setEditId(null);
-            setStateName("");
-          }}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-3 rounded-xl shadow-md transition"
+          onClick={() => setShowSidebar(false)}
+          className="text-gray-400 hover:text-gray-700 hover:bg-gray-100 w-8 h-8 rounded-md flex items-center justify-center text-xl transition"
         >
-          + Add State
+          ×
         </button>
       </div>
 
-      {/* STATE LIST */}
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {data.length > 0 ? (
-          data.map((item) => (
-            <div
-              key={item._id}
-              className="bg-white p-5 rounded-2xl shadow-md border relative"
-            >
-              <div className="absolute top-3 right-3 flex gap-3 text-xl">
-                <button
-                  onClick={() => getOneState(item._id)}
-                  className="text-green-500 hover:scale-110 transition"
-                >
-                  👁️
-                </button>
-                {/* UPDATE */}
-                <button
-                  onClick={() => {
-                    setEditId(item._id);
-                    setEditState(item.state);
-                    setShowPopup(true);
-                  }}
-                  className="text-yellow-500 hover:scale-110 transition"
-                >
-                  ✏️
-                </button>
+      <nav className="p-3 flex flex-col gap-1">
+        {[
+          { label: "State",    path: "/state",       icon: "📍" },
+          { label: "District", path: "/district",    icon: "🗺️" },
+          { label: "City",     path: "/city",        icon: "🏙️" },
+          { label: "Hospital", path: "/gethospital", icon: "🏥" },
+        ].map((item) => (
+          <button
+            key={item.path}
+            onClick={() => { navigate(item.path); setShowSidebar(false); }}
+            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition text-left"
+          >
+            <span>{item.icon}</span> {item.label}
+          </button>
+        ))}
+      </nav>
+    </div>
 
-                {/* DELETE */}
-                <button
-                  onClick={() => deleteState(item._id)}
-                  className="text-red-500 hover:scale-110 transition"
-                >
-                  🗑️
-                </button>
-
-                {/* RESTORE / SOFT DELETE */}
-                {item.status === "inactive" ? (
-                  <button
-                    onClick={() => restoreState(item._id)}
-                    className="text-blue-500 hover:scale-110 transition"
-                  >
-                    🔄
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => softDelete(item._id)}
-                    className="text-gray-700 hover:scale-110 transition"
-                  >
-                    🚫
-                  </button>
-                )}
-              </div>
-
-              {/* STATE DATA */}
-              <h1 className="text-xl font-bold text-gray-800">{item.state}</h1>
-              <p className="text-gray-500 mt-2">🌍 {item.country}</p>
-              <p className="text-gray-500 mt-2">Status : {item.status}</p>
+    {/* STATE CARDS GRID */}
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      {data.length > 0 ? data.map((item) => (
+        <div
+          key={item._id}
+          className="bg-white border border-gray-100 rounded-2xl p-4 hover:border-gray-300 transition"
+        >
+          {/* CARD TOP */}
+          <div className="flex items-start justify-between mb-3">
+            <div className={`w-10 h-10 rounded-xl flex items-center justify-center text-lg ${item.status === "inactive" ? "bg-red-50" : "bg-blue-50"}`}>
+              🗺️
             </div>
-          ))
-        ) : (
-          <p>No State Found</p>
-        )}
-      </div>
 
-      {/* POPUP */}
-
-      {showPopup && (
-        <div className="fixed inset-0 bg-black/50 flex justify-center items-center">
-          <div className="bg-white p-6 rounded-2xl w-[380px] shadow-2xl">
-            <h1 className="text-2xl font-bold mb-5 text-gray-800">
-              {editId ? "Update State" : "Add State"}
-            </h1>
-
-            <input
-              type="text"
-              placeholder="Enter State Name"
-              className="w-full border p-3 rounded-xl mb-5 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={editId ? editState : stateName}
-              onChange={(e) =>
-                editId
-                  ? setEditState(e.target.value)
-                  : setStateName(e.target.value)
-              }
-            />
-
-            <div className="flex gap-3">
+            {/* ACTION ICONS */}
+            <div className="flex items-center gap-1">
               <button
-                onClick={() =>
-                  editId ? updateState(editId) : handleAddState()
-                }
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-xl transition"
-              >
-                {editId ? "Update" : "Submit"}
-              </button>
+                onClick={() => getOneState(item._id)}
+                className="w-7 h-7 flex items-center justify-center rounded-md text-gray-400 hover:text-blue-600 hover:bg-blue-50 transition text-sm"
+                title="View"
+              >👁️</button>
 
               <button
-                onClick={() => {
-                  setShowPopup(false);
-                  setEditId(null);
-                  setEditState("");
-                }}
-                className="w-full bg-red-500 hover:bg-red-600 text-white p-3 rounded-xl transition"
-              >
-                Close
-              </button>
+                onClick={() => { setEditId(item._id); setEditState(item.state); setShowPopup(true); }}
+                className="w-7 h-7 flex items-center justify-center rounded-md text-gray-400 hover:text-amber-600 hover:bg-amber-50 transition text-sm"
+                title="Edit"
+              >✏️</button>
+
+              <button
+                onClick={() => deleteState(item._id)}
+                className="w-7 h-7 flex items-center justify-center rounded-md text-gray-400 hover:text-red-600 hover:bg-red-50 transition text-sm"
+                title="Delete"
+              >🗑️</button>
+
+              {item.status === "inactive" ? (
+                <button
+                  onClick={() => restoreState(item._id)}
+                  className="w-7 h-7 flex items-center justify-center rounded-md text-gray-400 hover:text-green-600 hover:bg-green-50 transition text-sm"
+                  title="Restore"
+                >🔄</button>
+              ) : (
+                <button
+                  onClick={() => softDelete(item._id)}
+                  className="w-7 h-7 flex items-center justify-center rounded-md text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition text-sm"
+                  title="Deactivate"
+                >🚫</button>
+              )}
             </div>
           </div>
+
+          {/* STATE INFO */}
+          <h2 className="text-base font-semibold text-gray-800 mb-1">{item.state}</h2>
+          <p className="text-sm text-gray-500 mb-3">🌍 {item.country}</p>
+
+          {/* STATUS BADGE */}
+          <span className={`inline-flex items-center gap-1 text-xs font-medium px-2.5 py-1 rounded-full ${
+            item.status === "inactive"
+              ? "bg-red-50 text-red-700"
+              : "bg-green-50 text-green-700"
+          }`}>
+            {item.status === "inactive" ? "● Inactive" : "● Active"}
+          </span>
         </div>
-      )}
-
-      {/* VIEW POPUP */}
-
-      {showViewPopup && singleState && (
-        <div className="fixed inset-0 bg-black/50 flex justify-center items-center">
-          <div className="bg-white p-6 rounded-2xl w-[400px] shadow-2xl">
-            <h1 className="text-2xl font-bold mb-5 text-gray-800">
-              View State
-            </h1>
-
-            <div className="space-y-3">
-              <p className="text-lg">
-                <span className="font-bold">State :</span>
-                {singleState.state}
-              </p>
-
-              <p className="text-lg">
-                <span className="font-bold">Country :</span>
-                {singleState.country}
-              </p>
-
-              <p className="text-lg">
-                <span className="font-bold">Status :</span>
-                {singleState.status}
-              </p>
-            </div>
-            <button
-              onClick={() => {
-                setShowViewPopup(false);
-                setSingleState(null);
-              }}
-              className="mt-6 w-full bg-red-500 hover:bg-red-600 text-white py-3 rounded-xl"
-            >
-              Close
-            </button>
-          </div>
-        </div>
+      )) : (
+        <p className="text-gray-400 text-sm col-span-4 text-center py-12">No state found.</p>
       )}
     </div>
-  );
+
+    {/* ADD / EDIT POPUP */}
+    {showPopup && (
+      <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
+        <div className="bg-white p-6 rounded-2xl w-80 border border-gray-100">
+          <h2 className="text-base font-semibold text-gray-800 mb-4">
+            {editId ? "Update state" : "Add state"}
+          </h2>
+
+          <input
+            type="text"
+            placeholder="Enter state name"
+            className="w-full border border-gray-200 px-3 py-2.5 rounded-lg text-sm mb-4 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            value={editId ? editState : stateName}
+            onChange={(e) => editId ? setEditState(e.target.value) : setStateName(e.target.value)}
+          />
+
+          <div className="flex gap-3">
+            <button
+              onClick={() => editId ? updateState(editId) : handleAddState()}
+              className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-lg text-sm transition"
+            >
+              {editId ? "Update" : "Submit"}
+            </button>
+            <button
+              onClick={() => { setShowPopup(false); setEditId(null); setEditState(""); }}
+              className="flex-1 border border-gray-200 text-gray-600 hover:bg-gray-100 py-2.5 rounded-lg text-sm transition"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
+
+    {/* VIEW POPUP */}
+    {showViewPopup && singleState && (
+      <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
+        <div className="bg-white p-6 rounded-2xl w-80 border border-gray-100">
+          <h2 className="text-base font-semibold text-gray-800 mb-4">View state</h2>
+
+          <div className="space-y-3">
+            {[
+              { label: "State",   val: singleState.state },
+              { label: "Country", val: singleState.country },
+            ].map((row) => (
+              <div key={row.label} className="flex justify-between items-center py-2 border-b border-gray-100 text-sm">
+                <span className="text-gray-500">{row.label}</span>
+                <span className="font-medium text-gray-800">{row.val}</span>
+              </div>
+            ))}
+
+            <div className="flex justify-between items-center py-2 text-sm">
+              <span className="text-gray-500">Status</span>
+              <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${singleState.status === "inactive" ? "bg-red-50 text-red-700" : "bg-green-50 text-green-700"}`}>
+                {singleState.status === "inactive" ? "● Inactive" : "● Active"}
+              </span>
+            </div>
+          </div>
+
+          <button
+            onClick={() => { setShowViewPopup(false); setSingleState(null); }}
+            className="mt-5 w-full border border-gray-200 text-gray-600 hover:bg-gray-100 py-2.5 rounded-lg text-sm transition"
+          >
+            Close
+          </button>
+        </div>
+      </div>
+    )}
+  </div>
+);
 };
 
 export default State;

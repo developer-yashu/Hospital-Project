@@ -20,9 +20,10 @@ const Login = () => {
       console.log(res.data);
       alert("Login Success");
 
-      if (res.data.role === "superadmin") {
-        navigate("/Superadmin");
-      } else if (res.data.role === "hospital") {
+      // if (res.data.role === "superadmin") {
+        navigate("/gethospital");
+      // } else
+         if (res.data.role === "hospital") {
         navigate("/hospital-dashboard");
       }
     } catch (error) {

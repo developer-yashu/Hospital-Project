@@ -59,19 +59,52 @@ const GetHospital = () => {
     fetchHospitals();
   }, []);
 
+  const totalBeds = hospitals.reduce((acc, item) => acc + Number(item.totalbad),0);
+
+  const totalICUBeds = hospitals.reduce((acc, item) => acc + Number(item.icubad),0);
+
+  const totalHospitals = hospitals.length;
+
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       {/* TITLE */}
-      <div className="flex justify-between items-center mb-8">
+      {/* HEADER */}
+      <div className="mb-10">
+        {/* TOP BAR */}
+        <div className="bg-white rounded-3xl shadow-md px-6 py-5 flex items-center justify-between border border-gray-100">
+          {/* MENU BUTTON */}
+          <button
+            onClick={() => setShowSidebar(true)}
+            className="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 px-5 py-3 rounded-2xl transition"
+          >
+            <span className="text-xl">☰</span>
 
-         <button
-          onClick={() => setShowSidebar(true)}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl shadow-lg"
-        >
-          Sidebar
-        </button>
+            <span className="font-semibold text-gray-700">Menu</span>
+          </button>
 
-        <h1 className="text-3xl font-bold text-blue-600">All Hospitals</h1>
+          {/* TITLE */}
+          <div className="text-center">
+            <h1 className="text-4xl font-extrabold text-gray-800 tracking-wide">
+              All Hospitals
+            </h1>
+          </div>
+
+          {/* RIGHT SIDE */}
+          <div className="bg-blue-50 text-blue-600 px-5 py-3 rounded-2xl font-bold text-lg shadow-sm">
+            🏥 {totalHospitals}
+            <p className="text-slate-400">Hospitals</p>
+          </div>
+
+           <div className="bg-blue-50 text-blue-600 px-5 py-3 rounded-2xl font-bold text-lg shadow-sm">
+              🛏️   {totalBeds} 
+              <p className="text-slate-400">totalBeds</p>
+          </div>
+
+          <div className="bg-blue-50 text-blue-600 px-5 py-3 rounded-2xl font-bold text-lg shadow-sm">
+              ❤️ {totalICUBeds}
+              <p className="text-slate-400">ICU Beds</p>
+          </div>
+        </div>
       </div>
 
       {/* HOSPITAL LIST */}
@@ -164,71 +197,50 @@ const GetHospital = () => {
         )}
       </div>
 
+      {/* BACKDROP */}
+      {showSidebar && (
+        <div
+          onClick={() => setShowSidebar(false)}
+          className="fixed inset-0 bg-black/40 z-40"
+        />
+      )}
 
-             {showSidebar && (
-          <div
+      {/* SIDEBAR */}
+      <div
+        className={`fixed top-0 left-0 h-full w-64 bg-white border-r border-gray-100 z-50 flex flex-col transform transition-transform duration-300 ${showSidebar ? "translate-x-0" : "-translate-x-full"}`}
+      >
+        <div className="flex items-center justify-between px-4 py-4 border-b border-gray-100">
+          <h2 className="text-base font-semibold text-gray-800">
+            Add location
+          </h2>
+          <button
             onClick={() => setShowSidebar(false)}
-            className="fixed inset-0 bg-black/40 z-40"
-          ></div>
-        )}
+            className="text-gray-400 hover:text-gray-700 hover:bg-gray-100 w-8 h-8 rounded-md flex items-center justify-center text-xl transition"
+          >
+            ×
+          </button>
+        </div>
 
-
-            <div
-          className={`fixed top-0 left-0 h-full w-[320px] bg-white shadow-2xl z-50 transform transition-transform duration-300 ${
-            showSidebar ? "translate-x-0" : "-translate-x-full"
-          }`}
-        >
-          {/* HEADER */}
-          <div className="flex justify-between items-center p-5 border-b">
-            <h2 className="text-2xl font-bold text-gray-800">Add Location</h2>
-
+        <nav className="p-3 flex flex-col gap-1">
+          {[
+            { label: "State", path: "/state", icon: "📍" },
+            { label: "District", path: "/district", icon: "🗺️" },
+            { label: "City", path: "/city", icon: "🏙️" },
+            { label: "Hospital", path: "/gethospital", icon: "🏥" },
+          ].map((item) => (
             <button
-              onClick={() => setShowSidebar(false)}
-              className="text-red-500 text-3xl font-bold"
-            >
-              ×
-            </button>
-          </div>
-
-          {/* MENU */}
-          <div className="p-5 flex flex-col gap-4">
-            <button
+              key={item.path}
               onClick={() => {
-                navigate("/state");
+                navigate(item.path);
+                setShowSidebar(false);
               }}
-              className="bg-black hover:bg-gray-800 text-white py-3 rounded-xl transition"
+              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition text-left"
             >
-              State
+              <span>{item.icon}</span> {item.label}
             </button>
-
-            <button
-              onClick={() => {
-                navigate("/district");
-              }}
-              className="bg-black hover:bg-gray-800 text-white py-3 rounded-xl transition"
-            >
-              District
-            </button>
-
-            <button
-              onClick={() => {
-                navigate("/city");
-              }}
-              className="bg-black hover:bg-gray-800 text-white py-3 rounded-xl transition"
-            >
-              City
-            </button>
-
-            <button
-              onClick={() => {
-                navigate("/gethospital");
-              }}
-              className="bg-black hover:bg-gray-800 text-white py-3 rounded-xl transition"
-            >
-              Hospital
-            </button>
-          </div>
-        </div>  
+          ))}
+        </nav>
+      </div>
     </div>
   );
 };

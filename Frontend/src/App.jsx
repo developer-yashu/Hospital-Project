@@ -15,6 +15,8 @@ import Hospitaldashboard from "./Component/Hospitaldashboard";
 import Department from "./Component/Department";
 import SubDepartment from "./Component/SubDepartment";
 import Doctor from "./Component/Doctor";
+import DefaultPage from "./Component/DefaultPage";
+import ViewDefaultPage from "./Component/ViewDefaultPage";
 
 
 const App = () => {
@@ -22,13 +24,18 @@ const App = () => {
     <div>
       <BrowserRouter>
         <Navbar />
-        <Routes>
+        <Routes>  
+              <Route path="/" element={<DefaultPage/>}/>
+              <Route path="/hospital/:hospitalId" element={<ViewDefaultPage/>}/>
+
+
+
+ 
               <Route path="/login" element={<Login/>}/>
               <Route path="/signup" element={<Signup/>}/>
-
               <Route path="/reset-password" element={<ResetPassword/>}/>
 
-              <Route path="/Superadmin" element={<Superadmin/>}/>
+              {/* <Route path="/Superadmin" element={<Superadmin/>}/> */}
               <Route path="/state" element={<State/>}/>
               <Route path="/District" element={<District/>}/>
               <Route path="/City" element={<City/>}/>

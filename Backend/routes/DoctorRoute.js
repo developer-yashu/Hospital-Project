@@ -9,6 +9,7 @@ const superadmin = require("../middleware/adminMiddleware");
 
 router.post("/add-Doctor", DoctorController.addDoctor);
 router.get("/get-all-Doctor",DoctorController.getdoctors);
+router.get("/get-all-Doctor-by-hospital/:id",DoctorController.getDoctorByHospital);
 
 router.get("/get-One-Doctor/:id",DoctorController.getOnedoctors);
 router.put("/update-Doctor/:id", DoctorController.updateDoctor);

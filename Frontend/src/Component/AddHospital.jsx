@@ -14,13 +14,13 @@ const AddHospital = () => {
   const [LicenseNumber, setLicenseNumber] = useState("");
   const [CEO, setCEO] = useState("");
 
-const [states, setStates] = useState([]);
-const [districts, setDistricts] = useState([]);
-const [cities, setCities] = useState([]);
+  const [states, setStates] = useState([]);
+  const [districts, setDistricts] = useState([]);
+  const [cities, setCities] = useState([]);
 
-const [stateId, setStateId] = useState("");
-const [districtId, setDistrictId] = useState("");
-const [CityId, setCityId] = useState("");
+  const [stateId, setStateId] = useState("");
+  const [districtId, setDistrictId] = useState("");
+  const [CityId, setCityId] = useState("");
 
   const fetchCities = async () => {
     try {
@@ -31,7 +31,7 @@ const [CityId, setCityId] = useState("");
     }
   };
 
-   ///get-state
+  ///get-state
   const fetchStates = async () => {
     try {
       const res = await axios.get("http://127.0.0.1:1010/location/get-state");
@@ -41,7 +41,7 @@ const [CityId, setCityId] = useState("");
     }
   };
 
-    // getDistrict
+  // getDistrict
   const fetchDistricts = async (stateId) => {
     try {
       const res = await axios.get(
@@ -54,8 +54,8 @@ const [CityId, setCityId] = useState("");
   };
 
   useEffect(() => {
-    fetchStates()
-    fetchDistricts()
+    fetchStates();
+    fetchDistricts();
     fetchCities();
   }, []);
 
@@ -64,7 +64,9 @@ const [CityId, setCityId] = useState("");
 
     try {
       const data = {
-        CityId,districtId,stateId,
+        CityId,
+        districtId,
+        stateId,
         hospitalName,
         hospitalEmail,
         hospitalPhone,
@@ -215,48 +217,47 @@ const [CityId, setCityId] = useState("");
             onChange={(e) => setCEO(e.target.value)}
           />
 
+          <select   className="border p-2 rounded-lg text-sm"
+            value={stateId}
+            onChange={(e) => {
+              setStateId(e.target.value);
+              fetchDistricts(e.target.value);
+            }}
+          >
+            <option>Select State</option>
+            {states.map((s) => (
+              <option key={s._id} value={s._id}>
+                {s.state}
+              </option>
+            ))}
+          </select>
 
-          <select
-  value={stateId}
-  onChange={(e) => {
-    setStateId(e.target.value);
-    fetchDistricts(e.target.value);
-  }}
->
-  <option>Select State</option>
-  {states.map((s) => (
-    <option key={s._id} value={s._id}>
-      {s.state}
-    </option>
-  ))}
-</select>
+          <select   className="border p-2 rounded-lg text-sm"
+            value={districtId}
+            onChange={(e) => {
+              setDistrictId(e.target.value);
+              fetchCities(e.target.value);
+            }}
+          >
+            <option>Select District</option>
+            {districts.map((d) => (
+              <option key={d._id} value={d._id}>
+                {d.district}
+              </option>
+            ))}
+          </select>
 
-          <select
-  value={districtId}
-  onChange={(e) => {
-    setDistrictId(e.target.value);
-    fetchCities(e.target.value);
-  }}
->
-  <option>Select District</option>
-  {districts.map((d) => (
-    <option key={d._id} value={d._id}>
-      {d.district}
-    </option>
-  ))}
-</select>
-
-
-
-          
           <select
             className="border p-2 rounded-lg text-sm"
             value={CityId}
-            onChange={(e) => setCityId(e.target.value)}
+            onChange={(e) => {
+              setDistrictId(e.target.value);
+              setCityId(e.target.value);
+            }}
           >
             <option value="">Select City</option>
 
-            {cities.map((item) => (
+            {cities.filter((item) => item.districtId?._id === districtId).map((item) => (
               <option key={item._id} value={item._id}>
                 {item.city}
               </option>

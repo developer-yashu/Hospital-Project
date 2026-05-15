@@ -6,7 +6,6 @@ const City = () => {
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
 
-
   // states
   const [states, setStates] = useState([]);
   const [districts, setDistricts] = useState([]);
@@ -17,7 +16,6 @@ const City = () => {
   const [cityName, setCityName] = useState("");
 
   const [showPopup, setShowPopup] = useState(false);
-  const [loading, setLoading] = useState(false);
 
   // update
   const [editId, setEditId] = useState(null);
@@ -27,9 +25,7 @@ const City = () => {
   const [singleCity, setSingleCity] = useState(null);
   const [showViewPopup, setShowViewPopup] = useState(false);
 
-  
-    const [showSidebar, setShowSidebar] = useState(false);
-  
+  const [showSidebar, setShowSidebar] = useState(false);
 
   ///get-state
   const fetchStates = async () => {
@@ -67,7 +63,6 @@ const City = () => {
   const handleAddCity = async (e) => {
     // e.preventDefault();
     try {
-      setLoading(true);
       await axios.post(
         "http://127.0.0.1:1010/location/addCity",
         {
@@ -170,12 +165,11 @@ const City = () => {
     <div className="p-6 bg-gray-100 min-h-screen">
       {/* HEADER */}
       <div className="flex justify-between items-center mb-6">
-
-         <button
+          <button
           onClick={() => setShowSidebar(true)}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl shadow-lg"
+          className="flex items-center gap-2 px-4 py-2 text-sm border border-gray-200 rounded-lg text-gray-600 hover:bg-gray-100 transition"
         >
-          Sidebar
+          <span className="text-lg">☰</span> Menu
         </button>
 
         <h1 className="text-3xl font-bold text-gray-800">📍 All Cities</h1>
@@ -197,8 +191,8 @@ const City = () => {
       {showPopup && (
         <div className="fixed inset-0 z-[9999] bg-black/60 flex justify-center items-start overflow-y-auto pt-5">
           <div className="bg-white p-6 rounded-2xl w-[400px] shadow-2xl my-5">
-            <h2 className="text-2xl font-bold mb-5">
-              {editId ? "Update City" : "Add City"}
+            <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">
+              {editId ? "✏️ Update City" : "🏙️ Add City"}
             </h2>
 
             {/* STATE */}
@@ -432,71 +426,43 @@ const City = () => {
         </div>
       )}
 
+   {/* BACKDROP */}
+    {showSidebar && (
+      <div
+        onClick={() => setShowSidebar(false)}
+        className="fixed inset-0 bg-black/40 z-40"
+      />
+    )}
 
-            {showSidebar && (
-          <div
-            onClick={() => setShowSidebar(false)}
-            className="fixed inset-0 bg-black/40 z-40"
-          ></div>
-        )}
-
-
-            <div
-          className={`fixed top-0 left-0 h-full w-[320px] bg-white shadow-2xl z-50 transform transition-transform duration-300 ${
-            showSidebar ? "translate-x-0" : "-translate-x-full"
-          }`}
+    {/* SIDEBAR */}
+    <div className={`fixed top-0 left-0 h-full w-64 bg-white border-r border-gray-100 z-50 flex flex-col transform transition-transform duration-300 ${showSidebar ? "translate-x-0" : "-translate-x-full"}`}>
+      <div className="flex items-center justify-between px-4 py-4 border-b border-gray-100">
+        <h2 className="text-base font-semibold text-gray-800">Add location</h2>
+        <button
+          onClick={() => setShowSidebar(false)}
+          className="text-gray-400 hover:text-gray-700 hover:bg-gray-100 w-8 h-8 rounded-md flex items-center justify-center text-xl transition"
         >
-          {/* HEADER */}
-          <div className="flex justify-between items-center p-5 border-b">
-            <h2 className="text-2xl font-bold text-gray-800">Add Location</h2>
+          ×
+        </button>
+      </div>
 
-            <button
-              onClick={() => setShowSidebar(false)}
-              className="text-red-500 text-3xl font-bold"
-            >
-              ×
-            </button>
-          </div>
-
-          {/* MENU */}
-          <div className="p-5 flex flex-col gap-4">
-            <button
-              onClick={() => {
-                navigate("/state");
-              }}
-              className="bg-black hover:bg-gray-800 text-white py-3 rounded-xl transition"
-            >
-              State
-            </button>
-
-            <button
-              onClick={() => {
-                navigate("/district");
-              }}
-              className="bg-black hover:bg-gray-800 text-white py-3 rounded-xl transition"
-            >
-              District
-            </button>
-
-            <button
-              onClick={() => {
-                navigate("/city");
-              }}
-              className="bg-black hover:bg-gray-800 text-white py-3 rounded-xl transition"
-            >
-              City
-            </button>
-
-            <button
-              onClick={() => {
-                navigate("/gethospital");
-              }}
-              className="bg-black hover:bg-gray-800 text-white py-3 rounded-xl transition"
-            >
-              Hospital
-            </button>
-          </div>
-        </div>  
+      <nav className="p-3 flex flex-col gap-1">
+        {[
+          { label: "State",    path: "/state",       icon: "📍" },
+          { label: "District", path: "/district",    icon: "🗺️" },
+          { label: "City",     path: "/city",        icon: "🏙️" },
+          { label: "Hospital", path: "/gethospital", icon: "🏥" },
+        ].map((item) => (
+          <button
+            key={item.path}
+            onClick={() => { navigate(item.path); setShowSidebar(false); }}
+            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition text-left"
+          >
+            <span>{item.icon}</span> {item.label}
+          </button>
+        ))}
+      </nav>
+    </div>
     </div>
   );
 };

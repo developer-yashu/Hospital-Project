@@ -1,7 +1,20 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import {
+  // IconMapPin,
+  // IconBuildingCommunity,
+  // IconPlus,
+  // IconTrash,
+  // IconX,
+  // IconCheck,
+  IconMenu2,
+  // IconFlag,
+  // IconBuilding,
+  // IconBuildingHospital,
+  // IconMap,
+  // IconMapPinPlus,
+} from "@tabler/icons-react";
 const District = () => {
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
@@ -83,9 +96,9 @@ const District = () => {
         
         <button
           onClick={() => setShowSidebar(true)}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl shadow-lg"
+          className="flex items-center gap-2 bg-white border border-gray-200 text-gray-700 px-4 py-2.5 rounded-xl shadow-sm hover:bg-gray-50 transition"
         >
-          Sidebar
+          <IconMenu2 size={18} /> Menu
         </button>
 
         <h1 className="text-3xl font-bold text-gray-800">📍 Add District</h1>
@@ -98,69 +111,43 @@ const District = () => {
       </div>
 
 
-         {showSidebar && (
-          <div
-            onClick={() => setShowSidebar(false)}
-            className="fixed inset-0 bg-black/40 z-40"
-          ></div>
-        )}
+      {/* BACKDROP */}
+    {showSidebar && (
+      <div
+        onClick={() => setShowSidebar(false)}
+        className="fixed inset-0 bg-black/40 z-40"
+      />
+    )}
 
-          <div
-          className={`fixed top-0 left-0 h-full w-[320px] bg-white shadow-2xl z-50 transform transition-transform duration-300 ${
-            showSidebar ? "translate-x-0" : "-translate-x-full"
-          }`}
+    {/* SIDEBAR */}
+    <div className={`fixed top-0 left-0 h-full w-64 bg-white border-r border-gray-100 z-50 flex flex-col transform transition-transform duration-300 ${showSidebar ? "translate-x-0" : "-translate-x-full"}`}>
+      <div className="flex items-center justify-between px-4 py-4 border-b border-gray-100">
+        <h2 className="text-base font-semibold text-gray-800">Add location</h2>
+        <button
+          onClick={() => setShowSidebar(false)}
+          className="text-gray-400 hover:text-gray-700 hover:bg-gray-100 w-8 h-8 rounded-md flex items-center justify-center text-xl transition"
         >
-          {/* HEADER */}
-          <div className="flex justify-between items-center p-5 border-b">
-            <h2 className="text-2xl font-bold text-gray-800">Add Location</h2>
+          ×
+        </button>
+      </div>
 
-            <button
-              onClick={() => setShowSidebar(false)}
-              className="text-red-500 text-3xl font-bold"
-            >
-              ×
-            </button>
-          </div>
-
-          {/* MENU */}
-          <div className="p-5 flex flex-col gap-4">
-            <button
-              onClick={() => {
-                navigate("/state");
-              }}
-              className="bg-black hover:bg-gray-800 text-white py-3 rounded-xl transition"
-            >
-              State
-            </button>
-
-            <button
-              onClick={() => {
-                navigate("/district");
-              }}
-              className="bg-black hover:bg-gray-800 text-white py-3 rounded-xl transition"
-            >
-              District
-            </button>
-
-            <button
-              onClick={() => {
-                navigate("/city");
-              }}
-              className="bg-black hover:bg-gray-800 text-white py-3 rounded-xl transition"
-            >
-              City
-            </button>
-
-            <button
-              onClick={() => {
-                navigate("/gethospital");
-              }}
-              className="bg-black hover:bg-gray-800 text-white py-3 rounded-xl transition"
-            >
-              Hospital
-            </button>
-          </div>
-        </div>  
+      <nav className="p-3 flex flex-col gap-1">
+        {[
+          { label: "State",    path: "/state",       icon: "📍" },
+          { label: "District", path: "/district",    icon: "🗺️" },
+          { label: "City",     path: "/city",        icon: "🏙️" },
+          { label: "Hospital", path: "/gethospital", icon: "🏥" },
+        ].map((item) => (
+          <button
+            key={item.path}
+            onClick={() => { navigate(item.path); setShowSidebar(false); }}
+            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition text-left"
+          >
+            <span>{item.icon}</span> {item.label}
+          </button>
+        ))}
+      </nav>
+    </div> 
 
 
 

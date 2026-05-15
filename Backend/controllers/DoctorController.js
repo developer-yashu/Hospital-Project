@@ -148,3 +148,18 @@ exports.restore = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+
+
+exports.getDoctorByHospital = async (req, res) => {
+    try {
+        const { hospitalId } = req.params;
+        const doctors = await Doctor.find({ hospitalId })
+            .populate("departmentId")
+            .populate("hospitalId")
+            .populate("subDepartmentId");
+        res.status(200).json({ doctors });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
