@@ -44,6 +44,13 @@ const Navbar = () => {
       {/* LEFT */}
       <div className="flex gap-4">
         <button
+          onClick={() => navigate("/signup")}
+          className="bg-white text-blue-600 px-4 py-2 rounded-lg font-semibold"
+        >
+          Signup
+        </button>
+
+        <button
           onClick={() => navigate("/login")}
           className="bg-white text-blue-600 px-4 py-2 rounded-lg font-semibold"
         >
