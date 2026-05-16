@@ -13,48 +13,48 @@ exports.addDoctor = async (req, res) => {
         const uploaddata = await upload.uploadImage(req.files)
         // console.log("uploaddata>>>>>>>>",uploaddata);
         const image_url = uploaddata[0].url;
-        console.log("image>>>>>>>>",image_url);
+        console.log("image>>>>>>>>", image_url);
 
 
-        const { name, email, phone, experience, gender, age, qualification, address, departmentId,hospitalId, subDepartmentId } = req.body;
-        // if (!(name && email && phone && experience && gender && age && qualification && address && departmentId && subDepartmentId && hospitalId)) {
-        //   return res.status(400).json({ message: "all filede required", });
-        // }
- 
+        const { name, email, phone, experience, gender, age, qualification, address, departmentId, hospitalId, subDepartmentId } = req.body;
+        if (!(name && email && phone && experience && gender && age && qualification && address && departmentId && subDepartmentId && hospitalId)) {
+            return res.status(400).json({ message: "all filede required", });
+        }
+
         const existingEmail = await Doctor.findOne({ email });
         if (existingEmail) {
             return res.status(400).json({ message: "email already exists" });
         }
-        const newDoc= {
+        const newDoc = {
             name, email, phone, experience, gender, age,
-            qualification, address,   departmentId, subDepartmentId,hospitalId,image: image_url,status: "active"
+            qualification, address, departmentId, subDepartmentId, hospitalId, image: image_url, status: "active"
         }
-        console.log("o",newDoc)
-        const doctor = await  Doctor.create(newDoc);
+        console.log("o", newDoc)
+        const doctor = await Doctor.create(newDoc);
 
 
         console.log('doctor>>>>>', doctor);
-        await doctor.save();
+        // await doctor.save();
 
-          const randomPassword = uuidv4().slice(0, 8);
-            const hashedPassword = await bcrypt.hash(randomPassword, 10);
+        const randomPassword = uuidv4().slice(0, 8);
+        const hashedPassword = await bcrypt.hash(randomPassword, 10);
 
-        const user=await new User({ 
-    name: doctor.name,
-    email: doctor.email,
-    phone: doctor.phone,
-    password: hashedPassword, 
-    role: "doctor",
-    doctorId: doctor._id,
-  });
-  await user.save();
+        const user = await new User({
+            name: doctor.name,
+            email: doctor.email,
+            phone: doctor.phone,
+            password: hashedPassword,
+            role: "doctor",
+            doctorId: doctor._id,
+        });
+        await user.save();
 
-  await sendMail(
-    doctor.email,
-    "Doctor Registration - Login Details",
-    `Email: ${doctor.email}
+        await sendMail(
+            doctor.email,
+            "Doctor Registration - Login Details",
+            `Email: ${doctor.email}
     Password: ${randomPassword}`
-  );    
+        );
 
         res.status(201).json({ message: "doctor  submitted", doctor });
     } catch (error) {
@@ -81,7 +81,7 @@ exports.getdoctors = async (req, res) => {
 exports.getOnedoctors = async (req, res) => {
     try {
         const { id } = req.params;
-        const doctor  = await Doctor.findById(id)
+        const doctor = await Doctor.findById(id)
             .populate("departmentId")
             .populate("hospitalId")
             .populate("subDepartmentId");

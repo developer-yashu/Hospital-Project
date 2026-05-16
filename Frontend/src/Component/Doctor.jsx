@@ -22,9 +22,9 @@ const Doctor = () => {
   const [editId, setEditId] = useState("");
 
   // singleDoctor
-  const [singleDoctor, setSingleDoctor] = useState("");
+  // const [singleDoctor, setSingleDoctor] = useState("");
   // viewPopup
-  const [viewPopup, setViewPopup] = useState(false);
+  // const [viewPopup, setViewPopup] = useState(false);
 
   // form states
   const [name, setName] = useState("");
@@ -38,6 +38,7 @@ const Doctor = () => {
   const [hospitalId, setHospitalId] = useState("");
   const [departmentId, setDepartmentId] = useState("");
   const [subDepartmentId, setSubDepartmentId] = useState("");
+  const [image, setImage] = useState("");
 
   // get doctors
   const getDoctors = async () => {
@@ -92,6 +93,7 @@ const Doctor = () => {
   // add doctor
   const addDoctor = async (e) => {
     e.preventDefault();
+
     const data = {
       name,
       email,
@@ -105,6 +107,7 @@ const Doctor = () => {
       hospitalId,
       departmentId,
       subDepartmentId,
+      image,
     };
     try {
       const res = await axios.post(
@@ -187,8 +190,8 @@ const Doctor = () => {
         `http://127.0.0.1:1010/Doctor/get-One-Doctor/${id}`,
       );
       console.log(res.data);
-      setSingleDoctor(res.data.doctor);
-      setViewPopup(true);
+      // setSingleDoctor(res.data.doctor);
+      // setViewPopup(true);
     } catch (error) {
       console.log(error);
       alert(error.response.data.message);
@@ -258,7 +261,7 @@ const Doctor = () => {
       </div>
 
       {/* LIST */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         {doctors?.map((item) => (
           <div
             key={item._id}
@@ -289,7 +292,7 @@ const Doctor = () => {
               </button>
 
               <button
-                onClick={() => getOneDoctor(item._id)}
+                onClick={() => navigate(`/doctor/${item._id}`)}
                 className="text-green-500"
               >
                 👁️
@@ -320,30 +323,27 @@ const Doctor = () => {
             </div>
 
             {/* CONTENT */}
+
+            <div className="flex justify-start mb-4 -mt-4">
+  <img
+    src={item.image}
+    className="w-30 h-30 rounded-full object-cover border-4 border-blue-100"
+  />
+</div>
             <h1 className="text-xl font-bold">{item.name}</h1>
 
             <p className="text-gray-500">Email : {item.email}</p>
 
             <p className="text-gray-500">Phone : {item.phone}</p>
 
-            <p className="text-gray-500">Gender : {item.gender}</p>
 
             <p className="text-gray-500">Experience : {item.experience}</p>
 
-            <p className="text-gray-500">
-              Qualification : {item.qualification}
-            </p>
+       
             <p className="text-gray-500">
               Hospital : {item.hospitalId?.hospitalName}
             </p>
-
-            <p className="text-gray-500">
-              Department : {item.departmentId?.departmentName}
-            </p>
-
-            <p className="text-gray-500">
-              Sub Department : {item.subDepartmentId?.SubdepartmentName}
-            </p>
+ 
 
             <p className="mt-2">
               Status :
@@ -572,6 +572,19 @@ const Doctor = () => {
                 </select>
               </div>
 
+              <div>
+                <label className="block mb-1 font-semibold text-gray-700">
+                  Doctor Image
+                </label>
+
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="w-full border p-3 rounded-xl"
+                  onChange={(e) => setImage(e.target.files[0])}
+                />
+              </div>
+
               {/* BUTTONS */}
               <div className="flex gap-4 mt-6">
                 <button
@@ -594,146 +607,90 @@ const Doctor = () => {
         </div>
       )}
 
-      {/* VIEW POPUP */}
-      {viewPopup && singleDoctor && (
+      {/* UPDATE POPUP */}
+      {updatePopup && (
         <div className="fixed inset-0 bg-black/60 flex justify-center items-center z-50 p-4">
-          <div className="bg-white w-full max-w-md rounded-3xl shadow-2xl p-6">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-3xl font-bold">👨‍⚕ Doctor Details</h2>
+          <div className="bg-white w-full max-w-2xl rounded-3xl shadow-2xl p-6">
+            <div className="flex justify-between items-center mb-5">
+              <h2 className="text-2xl font-bold">✏️ Update Doctor</h2>
 
               <button
-                onClick={() => setViewPopup(false)}
-                className="text-red-500 text-4xl"
+                onClick={() => setUpdatePopup(false)}
+                className="text-red-500 text-3xl"
               >
                 ×
               </button>
             </div>
-            <div className="space-y-3">
-              <p>
-                <b>Name :</b> {singleDoctor.name}
-              </p>
-              <p>
-                <b>Email :</b> {singleDoctor.email}
-              </p>
-              <p>
-                <b>Phone :</b> {singleDoctor.phone}
-              </p>
-              <p>
-                <b>Gender :</b> {singleDoctor.gender}
-              </p>
-              <p>
-                <b>Experience :</b> {singleDoctor.experience}
-              </p>
-              <p>
-                <b>Qualification :</b> {singleDoctor.qualification}
-              </p>
-              <p>
-                <b>Address :</b> {singleDoctor.address}
-              </p>
-              <p>
-                <b>Department :</b> {singleDoctor.departmentId?.departmentName}
-              </p>
-              <p>
-                <b>Sub Department :</b>{" "}
-                {singleDoctor.subDepartmentId?.SubdepartmentName}
-              </p>
-              <p>
-                <b>Status :</b> {singleDoctor.status}
-              </p>
-            </div>
+
+            <form
+              onSubmit={updateDoctor}
+              className="grid grid-cols-1 md:grid-cols-2 gap-4"
+            >
+              <input
+                type="text"
+                placeholder="Name"
+                className="border p-3 rounded-xl"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+
+              <input
+                type="email"
+                placeholder="Email"
+                className="border p-3 rounded-xl"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+
+              <input
+                type="number"
+                placeholder="Phone"
+                className="border p-3 rounded-xl"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+              />
+
+              <input
+                type="number"
+                placeholder="Experience"
+                className="border p-3 rounded-xl"
+                value={experience}
+                onChange={(e) => setExperience(e.target.value)}
+              />
+
+              <input
+                type="number"
+                placeholder="Age"
+                className="border p-3 rounded-xl"
+                value={age}
+                onChange={(e) => setAge(e.target.value)}
+              />
+
+              <input
+                type="text"
+                placeholder="Qualification"
+                className="border p-3 rounded-xl"
+                value={qualification}
+                onChange={(e) => setQualification(e.target.value)}
+              />
+
+              <textarea
+                placeholder="Address"
+                className="border p-3 rounded-xl md:col-span-2"
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+              />
+
+              <button
+                type="submit"
+                className="bg-blue-600 text-white py-3 rounded-xl md:col-span-2"
+              >
+                Update Doctor
+              </button>
+            </form>
           </div>
         </div>
       )}
-
-
-      {/* UPDATE POPUP */}
-{updatePopup && (
-  <div className="fixed inset-0 bg-black/60 flex justify-center items-center z-50 p-4">
-    <div className="bg-white w-full max-w-2xl rounded-3xl shadow-2xl p-6">
-
-      <div className="flex justify-between items-center mb-5">
-        <h2 className="text-2xl font-bold">✏️ Update Doctor</h2>
-
-        <button
-          onClick={() => setUpdatePopup(false)}
-          className="text-red-500 text-3xl"
-        >
-          ×
-        </button>
-      </div>
-
-      <form
-        onSubmit={updateDoctor}
-        className="grid grid-cols-1 md:grid-cols-2 gap-4"
-      >
-
-        <input
-          type="text"
-          placeholder="Name"
-          className="border p-3 rounded-xl"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-
-        <input
-          type="email"
-          placeholder="Email"
-          className="border p-3 rounded-xl"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-
-        <input
-          type="number"
-          placeholder="Phone"
-          className="border p-3 rounded-xl"
-          value={phone}
-          onChange={(e) => setPhone(e.target.value)}
-        />
-
-        <input
-          type="number"
-          placeholder="Experience"
-          className="border p-3 rounded-xl"
-          value={experience}
-          onChange={(e) => setExperience(e.target.value)}
-        />
-
-        <input
-          type="number"
-          placeholder="Age"
-          className="border p-3 rounded-xl"
-          value={age}
-          onChange={(e) => setAge(e.target.value)}
-        />
-
-        <input
-          type="text"
-          placeholder="Qualification"
-          className="border p-3 rounded-xl"
-          value={qualification}
-          onChange={(e) => setQualification(e.target.value)}
-        />
-
-        <textarea
-          placeholder="Address"
-          className="border p-3 rounded-xl md:col-span-2"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-        />
-
-        <button
-          type="submit"
-          className="bg-blue-600 text-white py-3 rounded-xl md:col-span-2"
-        >
-          Update Doctor
-        </button>
-
-      </form>
-    </div>
-  </div>
-)}
-
 
       {/* SIDEBAR BG */}
       {showSidebar && (
