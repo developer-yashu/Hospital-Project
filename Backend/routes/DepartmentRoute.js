@@ -6,6 +6,10 @@ const DepartmentController = require("../controllers/DepartmentController");
 const auth = require("../middleware/auth");
 const superadmin = require("../middleware/adminMiddleware");
 
+// const CountController = require("../controllers/CountController");
+// router.post("/add-Count", CountController.addCount);
+
+
 
 
 
@@ -16,8 +20,8 @@ router.put("/update-Department/:id", DepartmentController.updateDepartment);
 
 
 router.put("/soft-delete-Department/:id",DepartmentController.softDeleteDepartment);
-router.put("/restore-Department/:id", DepartmentController.restoreDepartment);
-router.delete("/delete-Department/:id", DepartmentController.deleteDepartment);
+router.put("/restore-Department/:id",auth, DepartmentController.restoreDepartment);
+router.delete("/delete-Department/:id",auth, DepartmentController.deleteDepartment);
 
 
 module.exports = router;

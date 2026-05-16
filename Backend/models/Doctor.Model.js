@@ -21,7 +21,7 @@ const doctorSchema = new mongoose.Schema(
         gender: {
             type: String,
             required: true,
-            enum: ["male", "female", "other"]
+            enum: ['male', 'female', 'other']
         },
         age: {
             type: Number,
@@ -52,10 +52,10 @@ const doctorSchema = new mongoose.Schema(
             type: String,
             default: "Doctor"
         },
-        // image:{
-        //     type: String,
-        //     // required: true
-        // },
+        image:{
+            type: String,
+            // required: true
+        },
         status: {
             type: String,
             enum: [ "active", "inactive"],
