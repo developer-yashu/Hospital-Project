@@ -12,8 +12,7 @@ const Login = () => {
     e.preventDefault();
     const data = { email, password };
     try {
-      const res = await axios.post(
-        "http://127.0.0.1:1010/superadmin/superadmin-login",data);
+      const res = await axios.post("http://127.0.0.1:1010/superadmin/superadmin-login",data);
       console.log(res.data);
 
       localStorage.setItem("token", res.data.token);
@@ -28,7 +27,8 @@ const Login = () => {
       }
     } catch (error) {
       console.log(error);
-alert(error.response?.data?.message || "Login Failed");    }
+alert(error.response?.data?.message); 
+   }
   };
 
   return (

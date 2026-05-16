@@ -41,10 +41,20 @@ exports.addHospital = async (req, res) => {
 //get all hospitals
 exports.getAllHospital = async (req, res) => {
   try {
-    const hospitals = await Hospital.find()
+     const search = req.query.search || "";
+     console.log(search);
+    // const hospitals = await Hospital.find()
+    const hospitals = await Hospital.find({
+      hospitalName: {
+        $regex: search,
+        $options: "i",
+      },
+    })
             .populate("stateId", "state")
   .populate("districtId", "district")
-  .populate("CityId", "city");
+  .populate("CityId", "city")
+  .populate("departmentId", "departmentName");
+
     res.status(200).json({ hospitals });
   } catch (error) {
     res.status(500).json({ message: error.message })

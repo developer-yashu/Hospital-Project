@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
 
 const Doctor = () => {
   const token = localStorage.getItem("token");
@@ -21,10 +23,6 @@ const Doctor = () => {
   //editId
   const [editId, setEditId] = useState("");
 
-  // singleDoctor
-  // const [singleDoctor, setSingleDoctor] = useState("");
-  // viewPopup
-  // const [viewPopup, setViewPopup] = useState(false);
 
   // form states
   const [name, setName] = useState("");
@@ -39,15 +37,16 @@ const Doctor = () => {
   const [departmentId, setDepartmentId] = useState("");
   const [subDepartmentId, setSubDepartmentId] = useState("");
   const [image, setImage] = useState("");
+  const [loading, setLoading] = useState(false);
 
   // get doctors
   const getDoctors = async () => {
     try {
-      const res = await axios.get(
-        "http://127.0.0.1:1010/Doctor/get-all-Doctor",
-      );
+      setLoading(true);
+      const res = await axios.get("http://127.0.0.1:1010/Doctor/get-all-Doctor");
 
       setDoctors(res.data.doctors);
+      setLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -182,22 +181,6 @@ const Doctor = () => {
     }
   };
 
-  // get-One-Doctor
-  const getOneDoctor = async (id) => {
-    try {
-      console.log(id);
-      const res = await axios.get(
-        `http://127.0.0.1:1010/Doctor/get-One-Doctor/${id}`,
-      );
-      console.log(res.data);
-      // setSingleDoctor(res.data.doctor);
-      // setViewPopup(true);
-    } catch (error) {
-      console.log(error);
-      alert(error.response.data.message);
-    }
-  };
-
   // UPDATE DOCTOR
   const updateDoctor = async (e) => {
     e.preventDefault();
@@ -262,7 +245,13 @@ const Doctor = () => {
 
       {/* LIST */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        {doctors?.map((item) => (
+        { loading ? 
+          <div className="flex w-200 justify-center items-center h-screen">  <img
+          src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif"
+          className=" ml-150"
+        />
+        </div>
+         :  doctors?.map((item) => (
           <div
             key={item._id}
             className="bg-white p-5 rounded-2xl shadow relative"
@@ -325,25 +314,23 @@ const Doctor = () => {
             {/* CONTENT */}
 
             <div className="flex justify-start mb-4 -mt-4">
-  <img
-    src={item.image}
-    className="w-30 h-30 rounded-full object-cover border-4 border-blue-100"
-  />
-</div>
+              <LazyLoadImage
+               effect="blur"
+                src={item.image}
+                className="w-30 h-30 rounded-full object-cover border-4 border-blue-100"
+              />
+            </div>
             <h1 className="text-xl font-bold">{item.name}</h1>
 
             <p className="text-gray-500">Email : {item.email}</p>
 
             <p className="text-gray-500">Phone : {item.phone}</p>
 
-
             <p className="text-gray-500">Experience : {item.experience}</p>
 
-       
             <p className="text-gray-500">
               Hospital : {item.hospitalId?.hospitalName}
             </p>
- 
 
             <p className="mt-2">
               Status :

@@ -4,13 +4,15 @@ import axios from "axios";
 
 const DefaultPage = () => {
   const [hospitals, setHospitals] = useState([]);
-    const navigate = useNavigate();
-  
+  const [search, setSearch] = useState("");
+  const navigate = useNavigate();
 
   //get-all-hospital
   const getHospitals = async () => {
     try {
-      const res = await axios.get("http://127.0.0.1:1010/Hospital/get-all-hospital");
+      const res = await axios.get(
+        `http://127.0.0.1:1010/Hospital/get-all-hospital?search=${search}`,
+      );
       console.log(res.data.hospitals);
       setHospitals(res.data.hospitals);
     } catch (error) {
@@ -20,11 +22,18 @@ const DefaultPage = () => {
 
   useEffect(() => {
     getHospitals();
-  }, []);
+  }, [search]);
 
   return (
     <div className="p-6">
       <h1 className="text-3xl font-bold mb-6">🏥 All Hospitals</h1>
+      <input
+        type="text"
+        placeholder="Search Hospital.../Hospitalname/"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className="w-full border border-gray-300 p-3 rounded-xl mb-6 outline-none"
+      />
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         {hospitals.map((item) => (
@@ -38,8 +47,7 @@ const DefaultPage = () => {
             </h2>
 
             <p className="text-gray-600 mt-2">
-              <b>Email :</b> {item.hospitalEmail
-}
+              <b>Email :</b> {item.hospitalEmail}
             </p>
 
             <p className="text-gray-600">
@@ -49,7 +57,6 @@ const DefaultPage = () => {
             <p className="text-gray-600">
               <b>state :</b> {item.stateId?.state}
             </p>
- 
           </div>
         ))}
       </div>

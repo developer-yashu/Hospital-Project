@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
 
 const ViewDoctor = () => {
   const { id } = useParams();
   const [doctor, setDoctor] = useState(null);
+    const [loading, setLoading] = useState(false);
 
   const getDoctor = async () => {
-    try {
-      const res = await axios.get(
-        `http://127.0.0.1:1010/Doctor/get-One-Doctor/${id}`,
-      );
+      try {
+        setLoading(true);
+
+      const res = await axios.get(`http://127.0.0.1:1010/Doctor/get-One-Doctor/${id}`,);
       setDoctor(res.data.doctor);
+      setLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -21,8 +25,20 @@ const ViewDoctor = () => {
     getDoctor();
   }, []);
 
+ if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif"
+          alt="loading"
+          className="w-20 h-20"
+        />
+      </div>
+    );
+  }
+
   if (!doctor) {
-    return <h2 className="p-6 text-xl">Loading...</h2>;
+    return <h2 className="p-6">No Doctor Found</h2>;
   }
 
 return (
@@ -31,7 +47,8 @@ return (
 
       {/* IMAGE */}
       <div className="flex justify-center mb-6">
-        <img
+        <LazyLoadImage
+                       effect="blur"
           src={doctor.image}
           alt="doctor"
           className="w-40 h-40 rounded-full object-cover border-4 border-blue-300 shadow-lg"
