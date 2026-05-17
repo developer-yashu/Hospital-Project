@@ -21,7 +21,11 @@ exports.addsubdepartment = async (req, res) => {
 
 exports.getsubdepartment = async (req, res) => {
     try {
-        const subdepartment = await SubDepartment.find()
+        const {search=""} = req.query;
+        const subdepartment = await SubDepartment.find({ 
+            SubdepartmentName: { $regex: search, $options: "i" 
+                
+            } })
          .populate("departmentId");
         res.status(200).json({subdepartment});
     } catch (error) {

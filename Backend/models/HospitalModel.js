@@ -64,14 +64,18 @@ const hospitalSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: "District",
    },
- 
+   // image: {
+   //    type: String,
+   //    // required: true
+   // },
+
    stateId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "State",
    }
 
 
-}, { timestamps: true ,versionKey: false });
+}, { timestamps: true, versionKey: false });
 
 module.exports = mongoose.model("Hospital", hospitalSchema);
 

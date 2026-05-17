@@ -26,8 +26,9 @@ const City = () => {
   const [showViewPopup, setShowViewPopup] = useState(false);
 
   const [showSidebar, setShowSidebar] = useState(false);
-
+  const [search, setSearch] = useState("");
   ///get-state
+
   const fetchStates = async () => {
     try {
       const res = await axios.get("http://127.0.0.1:1010/location/get-state");
@@ -52,7 +53,7 @@ const City = () => {
   // get-city
   const fetchCities = async () => {
     try {
-      const res = await axios.get("http://127.0.0.1:1010/location/get-city");
+      const res = await axios.get(`http://127.0.0.1:1010/location/get-city?search=${search}`);
       setCities(res.data.cities);
     } catch (error) {
       console.log(error);
@@ -159,7 +160,7 @@ const City = () => {
   useEffect(() => {
     fetchStates();
     fetchCities();
-  }, []);
+  }, [search]);
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
@@ -171,6 +172,14 @@ const City = () => {
         >
           <span className="text-lg">☰</span> Menu
         </button>
+
+           <input
+        type="text"
+        placeholder="Search state.../statename"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className="border border-gray-300 p-3 rounded-xl mb-6 outline-none"
+      />
 
         <h1 className="text-3xl font-bold text-gray-800">📍 All Cities</h1>
 

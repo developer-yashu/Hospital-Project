@@ -10,10 +10,10 @@ exports.addDoctor = async (req, res) => {
     try {
         // console.log(">>>>>>>>>>",req.body);
         // console.log(">>>>>>>>>>files",req.files);
-        const uploaddata = await upload.uploadImage(req.files)
+        // const uploaddata = await upload.uploadImage(req.files)
         // console.log("uploaddata>>>>>>>>",uploaddata);
-        const image_url = uploaddata[0].url;
-        console.log("image>>>>>>>>", image_url);
+        // const image_url = uploaddata[0].url;
+        // console.log("image>>>>>>>>", image_url);
 
 
         const { name, email, phone, experience, gender, age, qualification, address, departmentId, hospitalId, subDepartmentId } = req.body;
@@ -27,7 +27,7 @@ exports.addDoctor = async (req, res) => {
         }
         const newDoc = {
             name, email, phone, experience, gender, age,
-            qualification, address, departmentId, subDepartmentId, hospitalId, image: image_url, status: "active"
+            qualification, address, departmentId, subDepartmentId, hospitalId, status: "active"
         }
         console.log("o", newDoc)
         const doctor = await Doctor.create(newDoc);
@@ -66,7 +66,12 @@ exports.addDoctor = async (req, res) => {
 
 exports.getdoctors = async (req, res) => {
     try {
-        const doctors = await Doctor.find()
+        const { search = "" } = req.query;
+        const doctors = await Doctor.find({
+            name: {
+                $regex: search,
+                $options: "i",}})
+                
             .populate("departmentId")
             .populate("hospitalId")
             .populate("subDepartmentId");

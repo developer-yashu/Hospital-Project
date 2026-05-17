@@ -19,11 +19,12 @@ const State = () => {
   const [showViewPopup, setShowViewPopup] = useState(false);
 
   const [showSidebar, setShowSidebar] = useState(false);
+  const [search, setSearch] = useState("");
 
   // get-state
   const apiget = async () => {
     try {
-      const res = await axios.get("http://127.0.0.1:1010/location/get-state");
+      const res = await axios.get(`http://127.0.0.1:1010/location/get-state?search=${search}`);
       setData(res.data.states);
     } catch (error) {
       console.log(error);
@@ -116,7 +117,7 @@ const State = () => {
 
   useEffect(() => {
     apiget();
-  }, []);
+  }, [search]);
 
  return (
   <div className="p-6 min-h-screen bg-gray-50">
@@ -132,6 +133,14 @@ const State = () => {
         >
           <span className="text-lg">☰</span> Menu
         </button>
+
+        <input
+        type="text"
+        placeholder="Search state.../statename"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className="border border-gray-300 p-3 rounded-xl mb-6 outline-none"
+      />
 
         <h1 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
           📍 All states

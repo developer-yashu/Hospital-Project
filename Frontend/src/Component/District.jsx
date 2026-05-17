@@ -28,6 +28,7 @@ const District = () => {
   const [showPopup, setShowPopup] = useState(false);
 
   const [showSidebar, setShowSidebar] = useState(false);
+  const [search, setSearch] = useState("");
 
   // get states
   const fetchStates = async () => {
@@ -42,9 +43,7 @@ const District = () => {
   // get all districts
   const fetchDistricts = async () => {
     try {
-      const res = await axios.get(
-        "http://127.0.0.1:1010/location/getDistrictByState",
-      );
+      const res = await axios.get(`http://127.0.0.1:1010/location/getDistrictByState?search=${search}`);
       setDistricts(res.data.districts);
     } catch (error) {
       console.log(error);
@@ -87,7 +86,7 @@ const District = () => {
   useEffect(() => {
     fetchStates();
     fetchDistricts();
-  }, []);
+  }, [search]);
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">
@@ -100,6 +99,14 @@ const District = () => {
         >
           <IconMenu2 size={18} /> Menu
         </button>
+
+          <input
+        type="text"
+        placeholder="Search state.../statename"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className="border border-gray-300 p-3 rounded-xl mb-6 outline-none"
+      />
 
         <h1 className="text-3xl font-bold text-gray-800">📍 Add District</h1>
         <button

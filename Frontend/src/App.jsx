@@ -16,8 +16,8 @@ import Department from "./Component/Department";
 import SubDepartment from "./Component/SubDepartment";
 import Doctor from "./Component/Doctor";
 import DefaultPage from "./Component/DefaultPage";
-import ViewDefaultPage from "./Component/ViewDefaultPage";
 import ViewDoctor from "./Page/ViewDoctor";
+import ViewDefaultPage from './Page/ViewDefaultPage';
 
 
 const App = () => {

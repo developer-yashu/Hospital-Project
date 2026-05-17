@@ -27,7 +27,14 @@ exports.addState = async (req, res) => {
 //GET ALL STATE 
 exports.getAllState = async (req, res) => {
     try {
-        const states = await State.find();
+        const { search = "" } = req.query;
+
+        const states = await State.find({
+            state: {
+                $regex: search,
+                $options: "i",
+            },
+        });
         console.log(states);
 
         res.status(200).json({ states });
@@ -131,7 +138,7 @@ exports.addDistrict = async (req, res) => {
 // //GET DISTRICT BY STATE
 exports.getDistrictByState = async (req, res) => {
     try {
-        const stateId = req.params.stateId;
+        const {stateId} = req.params;
         const districts = await District.find({ stateId })
         res.status(200).json({ districts });
     } catch (error) {
@@ -142,7 +149,13 @@ exports.getDistrictByState = async (req, res) => {
 
 exports.getDistrictall = async (req, res) => {
     try {
-        const districts = await District.find()
+        const { search = "" } = req.query;
+        const districts = await District.find({
+            district: {
+                $regex: search,
+                $options: "i",
+            },
+        })
             .populate("stateId");
         res.status(200).json({ districts });
     } catch (error) {
@@ -235,15 +248,28 @@ exports.addCity = async (req, res) => {
 
 
 // GET CITY BY DISTRICT 
-
 exports.getCityByDistrict = async (req, res) => {
     try {
-        const cities = await City.find()
-            .populate("stateId", "state")
-            .populate("districtId", "district");
-
+        const { districtId } = req.params;
+        const cities = await City.find({ districtId });
         res.status(200).json({ cities });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
 
+
+
+
+
+exports.getCityall = async (req, res) => {
+    try {
+        const { search = "" } = req.query;
+        const cities = await City.find({
+            city: {
+                $regex: search,
+                $options: "i",}})
+        res.status(200).json({ cities });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

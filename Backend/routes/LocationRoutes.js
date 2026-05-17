@@ -24,9 +24,9 @@ router.put("/restore/:id", Location.restore);
 // District
 router.post("/addDistrict", Location.addDistrict);
 router.get("/getDistrictByState", Location.getDistrictall);
-router.get("/getDistrictByState/:stateId", Location.getDistrictByState);
 router.get("/get-one-District/:id", Location.getOneDistrict);
 router.delete("/delete-District-One/:id", Location.deleteDistrict);
+router.get("/getDistrictByState/:stateId", Location.getDistrictByState);
 
 
 
@@ -37,7 +37,9 @@ router.delete("/delete-District-One/:id", Location.deleteDistrict);
 
 // addCity
 router.post("/addCity", Location.addCity);
-router.get("/get-city", Location.getCityByDistrict);
+router.get("/get-city", Location.getCityall);
+router.get("/get-city-by-district/:districtId", Location.getCityByDistrict);
+
 router.delete("/delete-city-one/:id", Location.deleteCity);
 
 router.get("/get-one-city/:id", Location.getOneCity);

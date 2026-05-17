@@ -21,10 +21,13 @@ const AddHospital = () => {
   const [stateId, setStateId] = useState("");
   const [districtId, setDistrictId] = useState("");
   const [CityId, setCityId] = useState("");
+  // const [image, setImage] = useState(null);
 
-  const fetchCities = async () => {
+  const fetchCities = async (districtId) => {
     try {
-      const res = await axios.get("http://127.0.0.1:1010/location/get-city");
+      const res = await axios.get(
+        `http://127.0.0.1:1010/location/get-city-by-district/${districtId}`,
+      );
       setCities(res.data.cities);
     } catch (error) {
       console.log(error);
@@ -55,8 +58,6 @@ const AddHospital = () => {
 
   useEffect(() => {
     fetchStates();
-    fetchDistricts();
-    fetchCities();
   }, []);
 
   const handleSubmit = async (e) => {
@@ -80,10 +81,8 @@ const AddHospital = () => {
         CEO,
       };
 
-      const res = await axios.post(
-        "http://127.0.0.1:1010/Hospital/add-hospital",
-        data,
-      );
+      const res = await axios.post("http://127.0.0.1:1010/Hospital/add-hospital",
+        data,);
       alert(res.data.message);
 
       // empty form
@@ -216,33 +215,43 @@ const AddHospital = () => {
             value={CEO}
             onChange={(e) => setCEO(e.target.value)}
           />
+          {/* <input
+            type="file"
+            className="border p-2 rounded-lg text-sm"
+            onChange={(e) => setImage(e.target.files[0])}
+          /> */}
 
-          <select   className="border p-2 rounded-lg text-sm"
+          <select
+            className="border p-2 rounded-lg text-sm"
             value={stateId}
             onChange={(e) => {
               setStateId(e.target.value);
+              setDistrictId("");
+              setCityId("");
+              setCities([]);
               fetchDistricts(e.target.value);
             }}
           >
             <option>Select State</option>
-            {states.map((s) => (
-              <option key={s._id} value={s._id}>
-                {s.state}
+            {states.map((item) => (
+              <option key={item._id} value={item._id}>
+                {item.state}
               </option>
             ))}
           </select>
 
-          <select   className="border p-2 rounded-lg text-sm"
+          <select
+            className="border p-2 rounded-lg text-sm"
             value={districtId}
-            onChange={(e) => {
-              setDistrictId(e.target.value);
+            onChange={(e) => {setDistrictId(e.target.value);
+              setCityId("");
               fetchCities(e.target.value);
             }}
           >
             <option>Select District</option>
-            {districts.map((d) => (
-              <option key={d._id} value={d._id}>
-                {d.district}
+            {districts.map((item) => (
+              <option key={item._id} value={item._id}>
+                {item.district}
               </option>
             ))}
           </select>
@@ -250,14 +259,10 @@ const AddHospital = () => {
           <select
             className="border p-2 rounded-lg text-sm"
             value={CityId}
-            onChange={(e) => {
-              setDistrictId(e.target.value);
-              setCityId(e.target.value);
-            }}
-          >
+            onChange={(e) => {setCityId(e.target.value)}}
+    >
             <option value="">Select City</option>
-
-            {cities.filter((item) => item.districtId?._id === districtId).map((item) => (
+            {cities.map((item) => (
               <option key={item._id} value={item._id}>
                 {item.city}
               </option>

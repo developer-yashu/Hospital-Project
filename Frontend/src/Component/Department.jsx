@@ -76,8 +76,7 @@ const Department = () => {
   // get-all
   const GetAllDepartments = async () => {
     try {
-      const res = await axios.get(
-        "http://127.0.0.1:1010/Department/get-all-Department",
+      const res = await axios.get("http://127.0.0.1:1010/Department/get-all-Department",
          {  headers: {
       Authorization: `Bearer ${token}`
     }}
@@ -91,8 +90,7 @@ const Department = () => {
   //  get-One
   const getOneDepartment = async (id) => {
     try {
-      const res = await axios.get(
-        `http://127.0.0.1:1010/Department/get-One-Department/${id}`,
+      const res = await axios.get(`http://127.0.0.1:1010/Department/get-One-Department/${id}`,
          {  headers: {
       Authorization: `Bearer ${token}`
     }}
@@ -124,8 +122,7 @@ const Department = () => {
   // soft-delete
   const softDeleteDepartment = async (id) => {
     try {
-      await axios.put(
-        `http://127.0.0.1:1010/Department/soft-delete-Department/${id}`,
+      await axios.put(`http://127.0.0.1:1010/Department/soft-delete-Department/${id}`,
          {  headers: {
       Authorization: `Bearer ${token}`
     }}

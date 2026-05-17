@@ -18,6 +18,7 @@ const GetHospital = () => {
       setHospitals(res.data.hospitals);
     } catch (error) {
       console.log(error);
+      alert(error.response?.data?.message);
     }
   };
 
@@ -116,6 +117,9 @@ const GetHospital = () => {
               className="bg-white p-5 rounded-2xl shadow-lg border"
             >
               {/* HOSPITAL NAME */}
+              <img className="object-cover " src={item.image ||
+               "https://cdn-icons-png.flaticon.com/512/4320/4320337.png"
+            }/>
               <h1 className="text-2xl font-bold text-gray-800 mb-2">
                 {item.hospitalName}
               </h1>

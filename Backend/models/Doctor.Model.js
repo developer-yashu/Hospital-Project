@@ -52,10 +52,10 @@ const doctorSchema = new mongoose.Schema(
             type: String,
             default: "Doctor"
         },
-        image:{
-            type: String,
-            // required: true
-        },
+        // image:{
+        //     type: String,
+        //     // required: true
+        // },
         status: {
             type: String,
             enum: [ "active", "inactive"],

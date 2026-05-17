@@ -29,7 +29,7 @@ const SubDepartment = () => {
 
   // Sidebar
   const [showSidebar, setShowSidebar] = useState(false);
-
+  const [search, setSearch] = useState("");
   // ADD
   const AddDepartment = async (e) => {
     e.preventDefault();
@@ -80,7 +80,7 @@ const SubDepartment = () => {
   // get-all-subDepartment
   const GetAllSubDepartments = async () => {
     try {
-      const res = await axios.get("http://127.0.0.1:1010/SubDepartment/get-all-subDepartment");
+      const res = await axios.get(`http://127.0.0.1:1010/SubDepartment/get-all-subDepartment?search=${search}`);
       setSubDepartment(res.data.subdepartment);
     } catch (error) {
       console.log(error);
@@ -143,7 +143,7 @@ const SubDepartment = () => {
   useEffect(() => {
     GetAllSubDepartments();
     GetDepartments();
-  }, []);
+  }, [search]);
 
   return (
     <div className="min-h-screen bg-gray-100 p-4 md:p-6">
@@ -155,6 +155,14 @@ const SubDepartment = () => {
         >
           Hospital Menu
         </button>
+
+          <input 
+        type="text"
+        placeholder="Search Sub Department..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className="border border-gray-300 p-3 rounded-xl mb-6 outline-none w-full md:w-auto"
+      />
 
         <h1 className="text-2xl md:text-4xl font-bold text-gray-800">
           📍 Sub Departments
