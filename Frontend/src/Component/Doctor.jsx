@@ -23,7 +23,6 @@ const Doctor = () => {
   //editId
   const [editId, setEditId] = useState("");
 
-
   // form states
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -39,14 +38,15 @@ const Doctor = () => {
   // const [image, setImage] = useState("");
   const [loading, setLoading] = useState(false);
 
-    const [search, setSearch] = useState("");
-  
+  const [search, setSearch] = useState("");
 
   // get doctors
   const getDoctors = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(`http://127.0.0.1:1010/Doctor/get-all-Doctor?search=${search}`);
+      const res = await axios.get(
+        `http://127.0.0.1:1010/Doctor/get-all-Doctor?search=${search}`,
+      );
       setDoctors(res.data.doctors);
       setLoading(false);
     } catch (error) {
@@ -56,7 +56,9 @@ const Doctor = () => {
 
   const getHospitals = async () => {
     try {
-      const res = await axios.get("http://127.0.0.1:1010/Hospital/get-all-hospital");
+      const res = await axios.get(
+        "http://127.0.0.1:1010/Hospital/get-all-hospital",
+      );
       setHospitals(res.data.hospitals);
     } catch (error) {
       console.log(error);
@@ -66,7 +68,9 @@ const Doctor = () => {
   // get departments
   const getDepartments = async () => {
     try {
-      const res = await axios.get("http://127.0.0.1:1010/Department/get-all-department");
+      const res = await axios.get(
+        "http://127.0.0.1:1010/Department/get-all-department",
+      );
       setDepartments(res.data.Department);
     } catch (error) {
       console.log(error);
@@ -76,7 +80,9 @@ const Doctor = () => {
   // get sub departments
   const getSubDepartments = async () => {
     try {
-      const res = await axios.get("http://127.0.0.1:1010/SubDepartment/get-all-subDepartment");
+      const res = await axios.get(
+        "http://127.0.0.1:1010/SubDepartment/get-all-subDepartment",
+      );
       setSubDepartments(res.data.subdepartment);
     } catch (error) {
       console.log(error);
@@ -104,7 +110,8 @@ const Doctor = () => {
     };
     try {
       const res = await axios.post(
-        "http://127.0.0.1:1010/Doctor/add-Doctor",data,
+        "http://127.0.0.1:1010/Doctor/add-Doctor",
+        data,
         {
           headers: {
             token,
@@ -215,8 +222,6 @@ const Doctor = () => {
     getHospitals();
   }, [search]);
 
- 
-
   return (
     <div className="p-6">
       {/* HEADER */}
@@ -227,13 +232,14 @@ const Doctor = () => {
         >
           Hospital Menu
         </button>
+
         <input
-        type="text"
-        placeholder="Search doctor.../doctor name/"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        className=" border border-gray-300 p-3 rounded-xl mb-6 outline-none"
-      />
+          type="text"
+          placeholder="Search doctor.../doctor name/"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className=" border border-gray-300 p-3 rounded-xl mb-6 outline-none"
+        />
 
         <h1 className="text-3xl font-bold">📍 Doctors</h1>
 
@@ -247,108 +253,112 @@ const Doctor = () => {
 
       {/* LIST */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        { loading ? 
-          <div className="flex w-200 justify-center items-center h-screen">  <img
-          src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif"
-          className=" ml-150"
-        />
-        </div>
-         :  doctors?.map((item) => (
-          <div
-            key={item._id}
-            className="bg-white p-5 rounded-2xl shadow relative"
-          >
-            {/* ACTIONS */}
-            <div className="absolute top-2 right-2 flex gap-2">
-              <button
-                onClick={() => {
-                  setEditId(item._id);
-                  setName(item.name);
-                  setEmail(item.email);
-                  setPhone(item.phone);
-                  setExperience(item.experience);
-                  setGender(item.gender);
-                  setAge(item.age);
-                  setQualification(item.qualification);
-                  setAddress(item.address);
-                  setHospitalId(item.hospitalId?._id);
-                  setDepartmentId(item.departmentId?._id);
-                  setSubDepartmentId(item.subDepartmentId?._id);
-
-                  setUpdatePopup(true);
-                }}
-                className="text-yellow-500"
-              >
-                ✏️
-              </button>
-
-              <button
-                onClick={() => navigate(`/doctor/${item._id}`)}
-                className="text-green-500"
-              >
-                👁️
-              </button>
-
-              <button
-                onClick={() => deleteDoctor(item._id)}
-                className="text-red-500"
-              >
-                🗑
-              </button>
-
-              {item.status === "active" ? (
+        {loading ? (
+          <div className="flex w-200 justify-center items-center h-screen">
+            {" "}
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif"
+              className=" ml-150"
+            />
+          </div>
+        ) : (
+          doctors?.map((item) => (
+            <div
+              key={item._id}
+              className="bg-white p-5 rounded-2xl shadow relative"
+            >
+              {/* ACTIONS */}
+              <div className="absolute top-2 right-2 flex gap-2">
                 <button
-                  onClick={() => softDeleteDoctor(item._id)}
-                  className="text-red-500"
+                  onClick={() => {
+                    setEditId(item._id);
+                    setName(item.name);
+                    setEmail(item.email);
+                    setPhone(item.phone);
+                    setExperience(item.experience);
+                    setGender(item.gender);
+                    setAge(item.age);
+                    setQualification(item.qualification);
+                    setAddress(item.address);
+                    setHospitalId(item.hospitalId?._id);
+                    setDepartmentId(item.departmentId?._id);
+                    setSubDepartmentId(item.subDepartmentId?._id);
+
+                    setUpdatePopup(true);
+                  }}
+                  className="text-yellow-500"
                 >
-                  🚫
+                  ✏️
                 </button>
-              ) : (
+
                 <button
-                  onClick={() => restoreDoctor(item._id)}
+                  onClick={() => navigate(`/doctor/${item._id}`)}
                   className="text-green-500"
                 >
-                  🔄
+                  👁️
                 </button>
-              )}
+
+                <button
+                  onClick={() => deleteDoctor(item._id)}
+                  className="text-red-500"
+                >
+                  🗑
+                </button>
+
+                {item.status === "active" ? (
+                  <button
+                    onClick={() => softDeleteDoctor(item._id)}
+                    className="text-red-500"
+                  >
+                    🚫
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => restoreDoctor(item._id)}
+                    className="text-green-500"
+                  >
+                    🔄
+                  </button>
+                )}
+              </div>
+
+              {/* CONTENT */}
+
+              <div className="flex justify-start mb-4 -mt-4">
+                <LazyLoadImage
+                  effect="blur"
+                  src={item.image}
+                  className="w-30 h-30 rounded-full object-cover border-4 border-blue-100"
+                />
+              </div>
+              <h1 className="text-xl font-bold">{item.name}</h1>
+
+              <p className="text-gray-500">Email : {item.email}</p>
+
+              <p className="text-gray-500">Phone : {item.phone}</p>
+
+              <p className="text-gray-500">Experience : {item.experience}</p>
+
+              <p className="text-gray-500">
+                Hospital : {item.hospitalId?.hospitalName}
+              </p>
+
+              <p className="mt-2">
+                Status :
+                <span
+                  className={
+                    item.status === "active"
+                      ? " text-green-600 font-bold"
+                      : " text-red-500 font-bold"
+                  }
+                >
+                  {" "}
+                  {item.status}
+                </span>
+              </p>
             </div>
-
-            {/* CONTENT */}
-
-            <div className="flex justify-start mb-4 -mt-4">
-              <LazyLoadImage
-               effect="blur"
-                src={item.image}
-                className="w-30 h-30 rounded-full object-cover border-4 border-blue-100"
-              />
-            </div>
-            <h1 className="text-xl font-bold">{item.name}</h1>
-
-            <p className="text-gray-500">Email : {item.email}</p>
-
-            <p className="text-gray-500">Phone : {item.phone}</p>
-
-            <p className="text-gray-500">Experience : {item.experience}</p>
-
-            <p className="text-gray-500">
-              Hospital : {item.hospitalId?.hospitalName}
-            </p>
-
-            <p className="mt-2">
-              Status :
-              <span
-                className={
-                  item.status === "active"
-                    ? " text-green-600 font-bold"
-                    : " text-red-500 font-bold"
-                }
-              >
-                {" "}
-                {item.status}
-              </span>
-            </p>
-          </div>
-        ))}
+          ))
+        )}
       </div>
 
       {/* POPUP */}
@@ -696,7 +706,14 @@ const Doctor = () => {
         }`}
       >
         <div className="flex justify-between items-center p-5 border-b">
-          <h2 className="text-2xl font-bold text-gray-800">Hospital Menu</h2>
+          <h2
+            className="text-2xl font-bold text-gray-800"
+            onClick={() => {
+              navigate("/hospital-dashboard");
+            }}
+          >
+            Hospital Menu
+          </h2>
 
           <button
             onClick={() => setShowSidebar(false)}

@@ -131,20 +131,20 @@ const GetHospital = () => {
               <p className="text-gray-600">📞 {item.hospitalPhone}</p>
 
               {/* REGISTRATION NUMBER */}
-              <p className="text-gray-600">🆔 {item.registrationNumber}</p>
+              {/* <p className="text-gray-600">🆔 {item.registrationNumber}</p> */}
 
               {/* EMERGENCY */}
               <p className="text-gray-600">🚑 {item.emergencyhelpine}</p>
 
               {/* TOTAL BEDS */}
-              <p className="text-gray-600">🛏 Total Beds: {item.totalbad}</p>
+              {/* <p className="text-gray-600">🛏 Total Beds: {item.totalbad}</p> */}
 
               {/* ICU BEDS */}
-              <p className="text-gray-600">❤️ ICU Beds: {item.icubad}</p>
+              {/* <p className="text-gray-600">❤️ ICU Beds: {item.icubad}</p> */}
 
               {/* OPERATION THEATERS */}
               <p className="text-gray-600">
-                🏥 Operation Theaters: {item.operationTheaters}
+                {/* 🏥 Operation Theaters: {item.operationTheaters} */}
               </p>
 
               {/* AMBULANCE */}
@@ -153,7 +153,7 @@ const GetHospital = () => {
               </p>
 
               {/* LICENSE */}
-              <p className="text-gray-600">📜 License: {item.LicenseNumber}</p>
+              {/* <p className="text-gray-600">📜 License: {item.LicenseNumber}</p> */}
 
               {/* CEO */}
               <p className="text-gray-600">👨‍⚕ CEO: {item.CEO}</p>
@@ -214,7 +214,9 @@ const GetHospital = () => {
         className={`fixed top-0 left-0 h-full w-64 bg-white border-r border-gray-100 z-50 flex flex-col transform transition-transform duration-300 ${showSidebar ? "translate-x-0" : "-translate-x-full"}`}
       >
         <div className="flex items-center justify-between px-4 py-4 border-b border-gray-100">
-          <h2 className="text-base font-semibold text-gray-800">
+          <h2 className="text-base font-semibold text-gray-800" onClick={() => {
+              navigate("/Superadmin");
+            }} >
             Add location
           </h2>
           <button

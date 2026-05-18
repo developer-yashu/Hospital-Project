@@ -1,12 +1,60 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const HospitalDashboard = () => {
   const navigate = useNavigate();
   const [showSidebar, setShowSidebar] = useState(false);
 
+  const [totalDoctors, setTotalDoctors] = useState(0);
+  const [totalDepartments, setTotalDepartments] = useState(0);
+  const [totalSubDepartments, setTotalSubDepartments] = useState(0);
+
+  const token = localStorage.getItem("token");
+
+  const fetchDoctors = async () => {
+    const res = await axios.get("http://127.0.0.1:1010/Doctor/get-all-Doctor", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    setTotalDoctors(res.data.doctors.length);
+  };
+
+  const fetchDepartments = async () => {
+    const res = await axios.get(
+      "http://127.0.0.1:1010/Department/get-all-Department",
+      { headers: { Authorization: `Bearer ${token}` } },
+    );
+
+    setTotalDepartments(res.data.Department.length);
+  };
+
+  const fetchSubDepartments = async () => {
+    const res = await axios.get(
+      "http://127.0.0.1:1010/SubDepartment/get-all-subdepartment",
+      { headers: { Authorization: `Bearer ${token}` } },
+    );
+
+    setTotalSubDepartments(res.data.subdepartment.length);
+  };
+
+  useEffect(() => {
+    fetchDoctors();
+    fetchDepartments();
+    fetchSubDepartments();
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-100 p-10">
+
+      <div className="flex gap-5 items-center mb-6">
+
+      <button
+        onClick={() => navigate("/Superadmin")}
+        className="flex items-center gap-2 bg-gray-800 hover:bg-gray-900 text-white px-5 py-2 rounded-xl shadow-md transition duration-300"
+      >
+        <span className="text-lg">⬅</span>Back
+      </button>
 
       {/* BUTTON */}
       <button
@@ -15,6 +63,28 @@ const HospitalDashboard = () => {
       >
         Hospital Menu
       </button>
+    </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
+        <div className="bg-white p-6 rounded-2xl shadow">
+          <h2 className="text-xl font-bold">Total Doctors</h2>
+          <p className="text-3xl text-blue-600 font-bold">{totalDoctors}</p>
+        </div>
+
+        <div className="bg-white p-6 rounded-2xl shadow">
+          <h2 className="text-xl font-bold">Departments</h2>
+          <p className="text-3xl text-green-600 font-bold">
+            {totalDepartments}
+          </p>
+        </div>
+
+        <div className="bg-white p-6 rounded-2xl shadow">
+          <h2 className="text-xl font-bold">Sub Departments</h2>
+          <p className="text-3xl text-purple-600 font-bold">
+            {totalSubDepartments}
+          </p>
+        </div>
+      </div>
 
       {/* BACKDROP */}
       {showSidebar && (
@@ -30,12 +100,9 @@ const HospitalDashboard = () => {
           showSidebar ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-
         {/* HEADER */}
         <div className="flex justify-between items-center p-5 border-b">
-          <h2 className="text-2xl font-bold text-gray-800">
-            Hospital Menu
-          </h2>
+          <h2 className="text-2xl font-bold text-gray-800">Hospital Menu</h2>
 
           <button
             onClick={() => setShowSidebar(false)}
@@ -47,7 +114,6 @@ const HospitalDashboard = () => {
 
         {/* MENU */}
         <div className="p-5 flex flex-col gap-4">
-
           <button
             onClick={() => {
               navigate("/department");
@@ -74,9 +140,7 @@ const HospitalDashboard = () => {
           >
             Subdepartment
           </button>
-
         </div>
-
       </div>
     </div>
   );

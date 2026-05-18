@@ -34,9 +34,11 @@ const Department = () => {
       const res = await axios.post(
         "http://127.0.0.1:1010/Department/add-Department",
         data,
-       {  headers: {
-      Authorization: `Bearer ${token}`
-    }}
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
       alert(res.data.message);
       setDepartmentName("");
@@ -56,9 +58,11 @@ const Department = () => {
       const res = await axios.put(
         `http://127.0.0.1:1010/Department/update-Department/${editId}`,
         { departmentName: updateDepartmentName },
-         {  headers: {
-      Authorization: `Bearer ${token}`
-    }}
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
 
       alert(res.data.message);
@@ -76,10 +80,13 @@ const Department = () => {
   // get-all
   const GetAllDepartments = async () => {
     try {
-      const res = await axios.get("http://127.0.0.1:1010/Department/get-all-Department",
-         {  headers: {
-      Authorization: `Bearer ${token}`
-    }}
+      const res = await axios.get(
+        "http://127.0.0.1:1010/Department/get-all-Department",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
       setDepartments(res.data.Department);
     } catch (error) {
@@ -90,10 +97,13 @@ const Department = () => {
   //  get-One
   const getOneDepartment = async (id) => {
     try {
-      const res = await axios.get(`http://127.0.0.1:1010/Department/get-One-Department/${id}`,
-         {  headers: {
-      Authorization: `Bearer ${token}`
-    }}
+      const res = await axios.get(
+        `http://127.0.0.1:1010/Department/get-One-Department/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
       console.log("getOne ", res.data.Department);
       setSingleDepartment(res.data.Department);
@@ -108,9 +118,11 @@ const Department = () => {
     try {
       await axios.delete(
         `http://127.0.0.1:1010/Department/delete-Department/${id}`,
-         {  headers: {
-      Authorization: `Bearer ${token}`
-    }}
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
       alert("Department Deleted");
       GetAllDepartments();
@@ -122,10 +134,13 @@ const Department = () => {
   // soft-delete
   const softDeleteDepartment = async (id) => {
     try {
-      await axios.put(`http://127.0.0.1:1010/Department/soft-delete-Department/${id}`,
-         {  headers: {
-      Authorization: `Bearer ${token}`
-    }}
+      await axios.put(
+        `http://127.0.0.1:1010/Department/soft-delete-Department/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
       GetAllDepartments();
     } catch (error) {
@@ -137,9 +152,12 @@ const Department = () => {
   const restoreDepartment = async (id) => {
     try {
       await axios.put(
-        `http://127.0.0.1:1010/Department/restore-Department/${id}`, {  headers: {
-      Authorization: `Bearer ${token}`
-    }}
+        `http://127.0.0.1:1010/Department/restore-Department/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
       GetAllDepartments();
     } catch (error) {
@@ -151,9 +169,11 @@ const Department = () => {
     try {
       const res = await axios.get(
         "http://127.0.0.1:1010/Hospital/get-all-Hospital",
-         {  headers: {
-      Authorization: `Bearer ${token}`
-    }}
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
       );
       setHospitals(res.data.hospitals);
     } catch (error) {
@@ -427,7 +447,14 @@ const Department = () => {
       >
         {/* HEADER */}
         <div className="flex justify-between items-center p-5 border-b">
-          <h2 className="text-2xl font-bold">Hospital Menu</h2>
+          <h2
+            className="text-2xl font-bold"
+            onClick={() => {
+              navigate("/hospital-dashboard");
+            }}
+          >
+            Hospital Menu
+          </h2>
 
           <button
             onClick={() => setShowSidebar(false)}

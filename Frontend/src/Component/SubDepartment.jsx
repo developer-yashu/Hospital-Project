@@ -16,13 +16,14 @@ const SubDepartment = () => {
   const [updateSubDepartmentName, setUpdateSubDepartmentName] = useState("");
 
   const [selectedDepartmentId, setSelectedDepartmentId] = useState("");
-  const [updateSelectedDepartmentId, setUpdateSelectedDepartmentId] = useState("");
+  const [updateSelectedDepartmentId, setUpdateSelectedDepartmentId] =
+    useState("");
 
   const [subDepartment, setSubDepartment] = useState([]);
   const [Departments, setDepartments] = useState([]);
 
   // get one
-  const [OneSubDepartment,setOneSubDepartment] = useState("");
+  const [OneSubDepartment, setOneSubDepartment] = useState("");
 
   // UPDATE
   const [editId, setEditId] = useState("");
@@ -34,10 +35,13 @@ const SubDepartment = () => {
   const AddDepartment = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://127.0.0.1:1010/SubDepartment/add-subDepartment",
-        {SubdepartmentName: subDepartmentName,                      
-          departmentId: selectedDepartmentId,},
-        { headers: { token }}
+      const res = await axios.post(
+        "http://127.0.0.1:1010/SubDepartment/add-subDepartment",
+        {
+          SubdepartmentName: subDepartmentName,
+          departmentId: selectedDepartmentId,
+        },
+        { headers: { token } },
       );
       alert(res.data.message);
 
@@ -56,12 +60,14 @@ const SubDepartment = () => {
   const UpdateDepartment = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.put(`http://127.0.0.1:1010/SubDepartment/update-subdepartment/${editId}`,
-      {
-   SubdepartmentName: updateSubDepartmentName,
-   departmentId: updateSelectedDepartmentId
-},
-        {headers: { token},});
+      const res = await axios.put(
+        `http://127.0.0.1:1010/SubDepartment/update-subdepartment/${editId}`,
+        {
+          SubdepartmentName: updateSubDepartmentName,
+          departmentId: updateSelectedDepartmentId,
+        },
+        { headers: { token } },
+      );
       alert(res.data.message);
 
       setEditId("");
@@ -80,7 +86,9 @@ const SubDepartment = () => {
   // get-all-subDepartment
   const GetAllSubDepartments = async () => {
     try {
-      const res = await axios.get(`http://127.0.0.1:1010/SubDepartment/get-all-subDepartment?search=${search}`);
+      const res = await axios.get(
+        `http://127.0.0.1:1010/SubDepartment/get-all-subDepartment?search=${search}`,
+      );
       setSubDepartment(res.data.subdepartment);
     } catch (error) {
       console.log(error);
@@ -90,7 +98,9 @@ const SubDepartment = () => {
   // get-all-department
   const GetDepartments = async () => {
     try {
-      const res = await axios.get("http://127.0.0.1:1010/Department/get-all-department");
+      const res = await axios.get(
+        "http://127.0.0.1:1010/Department/get-all-department",
+      );
       setDepartments(res.data.Department);
     } catch (error) {
       console.log(error);
@@ -100,7 +110,9 @@ const SubDepartment = () => {
   // get-one
   const getOneSubDepartment = async (id) => {
     try {
-      const res = await axios.get(`http://127.0.0.1:1010/SubDepartment/get-One-subdepartment/${id}`);
+      const res = await axios.get(
+        `http://127.0.0.1:1010/SubDepartment/get-One-subdepartment/${id}`,
+      );
       console.log(res.data.subdepartment);
       setOneSubDepartment(res.data.subdepartment);
       setViewPopup(true);
@@ -112,7 +124,9 @@ const SubDepartment = () => {
   // Delete
   const deleteSubDepartment = async (id) => {
     try {
-      await axios.delete(`http://127.0.0.1:1010/SubDepartment/delete-subDepartment/${id}`);
+      await axios.delete(
+        `http://127.0.0.1:1010/SubDepartment/delete-subDepartment/${id}`,
+      );
       alert("Sub Department Delete");
       GetAllSubDepartments();
     } catch (error) {
@@ -123,7 +137,9 @@ const SubDepartment = () => {
   // SOFT DELETE
   const softDeleteSubDepartment = async (id) => {
     try {
-      await axios.put(`http://127.0.0.1:1010/SubDepartment/soft-delete-subDepartment/${id}`);
+      await axios.put(
+        `http://127.0.0.1:1010/SubDepartment/soft-delete-subDepartment/${id}`,
+      );
       GetAllSubDepartments();
     } catch (error) {
       console.log(error);
@@ -133,7 +149,9 @@ const SubDepartment = () => {
   // RESTORE
   const restoreSubDepartment = async (id) => {
     try {
-      await axios.put(`http://127.0.0.1:1010/SubDepartment/restore-subDepartment/${id}`);
+      await axios.put(
+        `http://127.0.0.1:1010/SubDepartment/restore-subDepartment/${id}`,
+      );
       GetAllSubDepartments();
     } catch (error) {
       console.log(error);
@@ -156,13 +174,13 @@ const SubDepartment = () => {
           Hospital Menu
         </button>
 
-          <input 
-        type="text"
-        placeholder="Search Sub Department..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        className="border border-gray-300 p-3 rounded-xl mb-6 outline-none w-full md:w-auto"
-      />
+        <input
+          type="text"
+          placeholder="Search Sub Department..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="border border-gray-300 p-3 rounded-xl mb-6 outline-none w-full md:w-auto"
+        />
 
         <h1 className="text-2xl md:text-4xl font-bold text-gray-800">
           📍 Sub Departments
@@ -249,9 +267,7 @@ const SubDepartment = () => {
                 Status :
                 <span
                   className={`ml-2 font-bold ${
-                    item.status === "active"
-                      ? "text-green-600"
-                      : "text-red-500"
+                    item.status === "active" ? "text-green-600" : "text-red-500"
                   }`}
                 >
                   {item.status}
@@ -346,9 +362,7 @@ const SubDepartment = () => {
                 placeholder="Update Sub Department"
                 className="w-full border-2 border-gray-200 p-4 rounded-2xl mb-5"
                 value={updateSubDepartmentName}
-                onChange={(e) =>
-                  setUpdateSubDepartmentName(e.target.value)
-                }
+                onChange={(e) => setUpdateSubDepartmentName(e.target.value)}
               />
 
               <button
@@ -382,17 +396,12 @@ const SubDepartment = () => {
                 <p className="text-gray-500 mb-2">Department Name</p>
 
                 <h1 className="text-2xl font-bold">
-                  {
-                    OneSubDepartment?.departmentId
-                      ?.departmentName
-                  }
+                  {OneSubDepartment?.departmentId?.departmentName}
                 </h1>
               </div>
 
               <div className="bg-gray-100 p-5 rounded-2xl">
-                <p className="text-gray-500 mb-2">
-                  Sub Department Name
-                </p>
+                <p className="text-gray-500 mb-2">Sub Department Name</p>
 
                 <h1 className="text-2xl font-bold">
                   {OneSubDepartment?.SubdepartmentName}
@@ -439,7 +448,14 @@ const SubDepartment = () => {
         }`}
       >
         <div className="flex justify-between items-center p-5 border-b">
-          <h2 className="text-2xl font-bold">Hospital Menu</h2>
+          <h2
+            className="text-2xl font-bold"
+            onClick={() => {
+              navigate("/hospital-dashboard");
+            }}
+          >
+            Hospital Menu
+          </h2>
 
           <button
             onClick={() => setShowSidebar(false)}
@@ -452,7 +468,8 @@ const SubDepartment = () => {
         <div className="p-5 flex flex-col gap-4">
           <button
             onClick={() => navigate("/department")}
-            className="bg-black hover:bg-gray-800 text-white py-3 rounded-2xl">
+            className="bg-black hover:bg-gray-800 text-white py-3 rounded-2xl"
+          >
             Department
           </button>
 

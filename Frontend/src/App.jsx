@@ -40,7 +40,7 @@ const App = () => {
                 <Route path="/Appointment" element={<ProtectedRoute><Appointment/></ProtectedRoute>}/>
 
 
-              {/* <Route path="/Superadmin" element={<Superadmin/>}/> */}
+              <Route path="/Superadmin" element={<Superadmin/>}/>
               <Route path="/state" element={<State/>}/>
               <Route path="/District" element={<District/>}/>
               <Route path="/City" element={<City/>}/>
