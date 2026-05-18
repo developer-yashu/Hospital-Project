@@ -254,7 +254,7 @@ const Department = () => {
                 <p className="text-lg text-gray-600">
                   Hospital :
                   <span className="font-bold ml-2 text-black">
-                    {item.hospitalId.hospitalName}
+                    {item.hospitalId?.hospitalName}
                   </span>
                 </p>
 
