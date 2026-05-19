@@ -35,7 +35,7 @@ const Doctor = () => {
   const [hospitalId, setHospitalId] = useState("");
   const [departmentId, setDepartmentId] = useState("");
   const [subDepartmentId, setSubDepartmentId] = useState("");
-  // const [image, setImage] = useState("");
+  const [image, setImage] = useState("");
   const [loading, setLoading] = useState(false);
 
   const [search, setSearch] = useState("");
@@ -44,9 +44,8 @@ const Doctor = () => {
   const getDoctors = async () => {
     try {
       setLoading(true);
-      const res = await axios.get(
-        `http://127.0.0.1:1010/Doctor/get-all-Doctor?search=${search}`,
-      );
+      const res = await axios.get(`http://127.0.0.1:1010/Doctor/get-all-Doctor?search=${search}`,
+        { headers: { Authorization: `Bearer ${token}` } },);
       setDoctors(res.data.doctors);
       setLoading(false);
     } catch (error) {
@@ -56,9 +55,8 @@ const Doctor = () => {
 
   const getHospitals = async () => {
     try {
-      const res = await axios.get(
-        "http://127.0.0.1:1010/Hospital/get-all-hospital",
-      );
+      const res = await axios.get("http://127.0.0.1:1010/Hospital/get-all-hospital",
+        { headers: { Authorization: `Bearer ${token}` } },);
       setHospitals(res.data.hospitals);
     } catch (error) {
       console.log(error);
@@ -68,9 +66,8 @@ const Doctor = () => {
   // get departments
   const getDepartments = async () => {
     try {
-      const res = await axios.get(
-        "http://127.0.0.1:1010/Department/get-all-department",
-      );
+      const res = await axios.get("http://127.0.0.1:1010/Department/get-all-department",
+                      { headers: { Authorization: `Bearer ${token}` } },);
       setDepartments(res.data.Department);
     } catch (error) {
       console.log(error);
@@ -80,9 +77,8 @@ const Doctor = () => {
   // get sub departments
   const getSubDepartments = async () => {
     try {
-      const res = await axios.get(
-        "http://127.0.0.1:1010/SubDepartment/get-all-subDepartment",
-      );
+      const res = await axios.get("http://127.0.0.1:1010/SubDepartment/get-all-subDepartment",
+          { headers: { Authorization: `Bearer ${token}` } },);
       setSubDepartments(res.data.subdepartment);
     } catch (error) {
       console.log(error);
@@ -106,16 +102,13 @@ const Doctor = () => {
       hospitalId,
       departmentId,
       subDepartmentId,
-      // image,
+      image,
     };
     try {
       const res = await axios.post(
         "http://127.0.0.1:1010/Doctor/add-Doctor",
         data,
-        {
-          headers: {
-            token,
-          },
+         { headers: { Authorization: `Bearer ${token}`}
         },
       );
 
@@ -571,7 +564,7 @@ const Doctor = () => {
                 </select>
               </div>
 
-              {/* <div>
+              <div>
                 <label className="block mb-1 font-semibold text-gray-700">
                   Doctor Image
                 </label>
@@ -582,7 +575,7 @@ const Doctor = () => {
                   className="w-full border p-3 rounded-xl"
                   onChange={(e) => setImage(e.target.files[0])}
                 />
-              </div> */}
+              </div>
 
               {/* BUTTONS */}
               <div className="flex gap-4 mt-6">

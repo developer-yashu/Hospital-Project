@@ -15,8 +15,8 @@ router.post("/signup",superadmincontrollers.signup);
 
 router.get("/get-profile",auth,superadmincontrollers.getProfile);
 
-router.get("/get-all-appointments",auth,superadmincontrollers.getAppointments);
 router.post("/add-appointment",auth,superadmincontrollers.addAppointment);
+router.get("/get-all-appointments",auth,superadmincontrollers.getAppointments);
 
 
 

@@ -18,8 +18,8 @@ import Doctor from "./Component/Doctor";
 import DefaultPage from "./Component/DefaultPage";
 import ViewDoctor from "./Page/ViewDoctor";
 import ViewDefaultPage from './Page/ViewDefaultPage';
-import Appointment from "./Page/Appointment";
 import ProtectedRoute from "./Component/ProtectedRoute";
+import AppointmentHistory from "./Page/AppointmentHistory";
 
 
 const App = () => {
@@ -37,7 +37,7 @@ const App = () => {
               <Route path="/login" element={<Login/>}/>
               <Route path="/signup" element={<Signup/>}/>
               <Route path="/reset-password" element={<ResetPassword/>}/>
-                <Route path="/Appointment" element={<ProtectedRoute><Appointment/></ProtectedRoute>}/>
+                {/* <Route path="/Appointment" element={<ProtectedRoute><Appointment/></ProtectedRoute>}/> */}
 
 
               <Route path="/Superadmin" element={<Superadmin/>}/>
@@ -51,6 +51,8 @@ const App = () => {
               <Route path="/SubDepartment" element={<SubDepartment/>}/>
               <Route path="/doctor" element={<Doctor/>}/>
               <Route path="/doctor/:id" element={<ViewDoctor/>} />
+              <Route path="/AppointmentHistory" element={<AppointmentHistory/>} />
+
 
 
 

@@ -59,26 +59,23 @@ const ViewDefaultPage = () => {
 
   const handleAppointment = async (doctorId) => {
     const token = localStorage.getItem("token");
-      const time = appointmentTime[doctorId]; 
+    const time = appointmentTime[doctorId];
 
     if (!token) {
       navigate("/login");
       return;
     }
     try {
+      const data = {
+        doctorId,
+        hospitalId,
+        appointmentDate: new Date().toISOString().split("T")[0],
+        appointmentTime: time,
+      };
       const res = await axios.post(
         "http://127.0.0.1:1010/superadmin/add-appointment",
-        {
-          doctorId: doctorId,
-          hospitalId: hospitalId,
-          appointmentDate: new Date().toISOString().split("T")[0], // default today
-          appointmentTime: time,  
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
+        data,
+        { headers: { Authorization: `Bearer ${token}` } },
       );
 
       alert("Appointment Booked Successfully");
@@ -310,14 +307,14 @@ const ViewDefaultPage = () => {
 
                     <div className="mt-4 space-y-2">
                       <select
-  value={appointmentTime[item._id] || ""}
-  onChange={(e) =>
-    setAppointmentTime({
-      ...appointmentTime,
-      [item._id]: e.target.value,
-    })
-  }
->
+                        value={appointmentTime[item._id] || ""}
+                        onChange={(e) =>
+                          setAppointmentTime({
+                            ...appointmentTime,
+                            [item._id]: e.target.value,
+                          })
+                        }
+                      >
                         <option value="">Select Time Slot</option>
                         <option value="9-11">9 AM - 11 AM</option>
                         <option value="1-3">1 PM - 3 PM</option>

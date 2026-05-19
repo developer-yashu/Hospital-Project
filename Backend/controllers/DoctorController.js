@@ -1,4 +1,6 @@
 const Doctor = require("../models/Doctor.Model");
+const DoctorImage = require("../models/DoctorimageModel");
+
 
 const User = require("../models/userModel");
 const sendMail = require("../utils/sendMail");
@@ -10,13 +12,13 @@ exports.addDoctor = async (req, res) => {
     try {
         // console.log(">>>>>>>>>>",req.body);
         // console.log(">>>>>>>>>>files",req.files);
-        // const uploaddata = await upload.uploadImage(req.files)
+        const uploaddata = await upload.uploadImage(req.files)
         // console.log("uploaddata>>>>>>>>",uploaddata);
-        // const image_url = uploaddata[0].url;
-        // console.log("image>>>>>>>>", image_url);
+        const image_url = uploaddata[0].url;
+        console.log("image>>>>>>>>", image_url);
 
 
-        const { name, email, phone, experience, gender, age, qualification, address, departmentId, hospitalId, subDepartmentId } = req.body;
+        const { name, email, phone, experience, gender, age, qualification, address, departmentId, hospitalId, subDepartmentId,} = req.body;
         if (!(name && email && phone && experience && gender && age && qualification && address && departmentId && subDepartmentId && hospitalId)) {
             return res.status(400).json({ message: "all filede required", });
         }
@@ -25,9 +27,13 @@ exports.addDoctor = async (req, res) => {
         if (existingEmail) {
             return res.status(400).json({ message: "email already exists" });
         }
+
+        //  const imageDocs = [];
+
+
         const newDoc = {
             name, email, phone, experience, gender, age,
-            qualification, address, departmentId, subDepartmentId, hospitalId, status: "active"
+            qualification, address, departmentId, subDepartmentId, hospitalId,image:image_url ,status: "active"
         }
         console.log("o", newDoc)
         const doctor = await Doctor.create(newDoc);

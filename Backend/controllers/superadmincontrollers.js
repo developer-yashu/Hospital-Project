@@ -1,5 +1,7 @@
 const User = require("../models/userModel");
 const SuperAdmin = require("../models/superAdminModel");
+const Doctor = require("../models/Doctor.Model");
+const Hospital = require("../models/HospitalModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const saltRounds = 10
@@ -138,32 +140,50 @@ exports.getProfile = async (req, res) => {
 
 exports.addAppointment = async (req, res) => {
   try {
-    const { doctorId,hospitalId, appointmentDate, appointmentTime } = req.body;
+    const { doctorId, hospitalId, appointmentDate, appointmentTime } = req.body;
     if (!(doctorId && hospitalId && appointmentDate && appointmentTime)) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-     const userID = req.user.id; 
-     console.log("userID>>>>>>>>", userID);
+    const userID = req.user.id;
+    console.log("userID>>>>>>>>", userID);
+       const doctor = await Doctor.findById(doctorId);
+       console.log("doctor>>>>>>>>", doctor);
+       const hospital = await Hospital.findById(hospitalId);
+        console.log("hospital>>>>>>>>", hospital);
+
     const newappointment = await new Appointment({ doctorId, userID, hospitalId, appointmentDate, appointmentTime, status: "peasant" });
     await newappointment.save();
-    res.status(201).json({ message: "Appointment created successfully",newappointment });
+    res.status(201).json({ message: "Appointment created successfully", newappointment });
     // return
-    try {
-      await sendMail(
-        req.user.email,
-        "Appointment Booked",
-        `
+
+ 
+
+    // sen user mail
+    await sendMail(
+      req.user.email,
+      "Appointment Booked",
+      `
         Your appointment is confirmed
-        doctor: ${doctorId.name}
-        hospital: ${hospitalId}
-        Date: ${appointmentDate}
-        Time: ${appointmentTime}
+   Doctor: ${doctor.name}
+Hospital: ${hospital.hospitalName}
+Date: ${appointmentDate}
+Time: ${appointmentTime}
         `
-      );
-    } catch (mailErr) {
-      console.log("Email error:", mailErr.message);
-    }
+    );
+
+
+
+    await sendMail(
+      doctor.email,
+      "New Appointment",
+      `
+      You have a new appointment
+
+      Patient: ${req.user.name}
+      Date: ${appointmentDate}
+      Time: ${appointmentTime}`
+    );
 
 
   } catch (error) {
@@ -175,7 +195,26 @@ exports.addAppointment = async (req, res) => {
 
 exports.getAppointments = async (req, res) => {
   try {
-    const appointments = await Appointment.find().populate("doctorId").populate("userID").populate("hospitalId");
+      let filter = {};
+
+    // user  login
+    if (req.user.role === "user") {
+      filter.userID = req.user.id;
+    }
+
+        // doctor login 
+    if (req.user.role === "doctor") {
+      const doctor = await Doctor.findOne({email: req.user.email});
+      filter.doctorId = doctor._id;
+    }
+
+    // hospital login
+       if (req.user.role === "hospital") {
+      const hospital = await Hospital.findOne({ hospitalEmail: req.user.email});
+      filter.hospitalId = hospital._id;
+    }
+
+    const appointments = await Appointment.find(filter).populate("doctorId").populate("userID").populate("hospitalId");
     res.status(200).json({ appointments });
   } catch (error) {
     res.status(500).json({ message: error.message });

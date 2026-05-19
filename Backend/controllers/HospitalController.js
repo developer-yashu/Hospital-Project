@@ -14,10 +14,10 @@ const bcrypt = require("bcrypt");
 
 exports.addHospital = async (req, res) => {
   try {
-            // const uploaddata = await upload.uploadImage(req.files)
-        // const image_url = uploaddata[0].url;
-        // console.log("image>>>>>>>>", image_url);
-    const { hospitalName, hospitalEmail, hospitalPhone, registrationNumber, emergencyhelpine, totalbad, icubad, operationTheaters, ambulancecount, LicenseNumber, CEO, districtId, stateId, CityId} = req.body;
+    // const uploaddata = await upload.uploadImage(req.files)
+    // const image_url = uploaddata[0].url;
+    // console.log("image>>>>>>>>", image_url);
+    const { hospitalName, hospitalEmail, hospitalPhone, registrationNumber, emergencyhelpine, totalbad, icubad, operationTheaters, ambulancecount, LicenseNumber, CEO, districtId, stateId, CityId } = req.body;
 
     const alreadyHospital = await Hospital.findOne({ hospitalEmail });
     if (alreadyHospital) {
@@ -28,15 +28,15 @@ exports.addHospital = async (req, res) => {
       return res.status(400).json({ message: "registration number already exists" })
     }
     const newDoc = {
-    // const hospital = new Hospital({
+      // const hospital = new Hospital({
       // CityId, districtId, stateId,
-     stateId,  districtId,CityId, hospitalName, hospitalEmail, hospitalPhone, registrationNumber, emergencyhelpine,
-      totalbad, icubad, operationTheaters, ambulancecount, LicenseNumber, CEO,  status: "pending"
+      stateId, districtId, CityId, hospitalName, hospitalEmail, hospitalPhone, registrationNumber, emergencyhelpine,
+      totalbad, icubad, operationTheaters, ambulancecount, LicenseNumber, CEO, status: "pending"
     };
     //  image: image_url,
-   console.log("newDoc>>>>>>>>", newDoc);
+    console.log("newDoc>>>>>>>>", newDoc);
     // const hospital =
-     await Hospital.create(newDoc);
+    await Hospital.create(newDoc);
 
     // await hospital.save();
     res.status(201).json({ message: "hospital request submitted", hospital });
@@ -51,10 +51,10 @@ exports.addHospital = async (req, res) => {
 //get all hospitals
 exports.getAllHospital = async (req, res) => {
   try {
-    const { search=""} = req.query;
+    const { search = "" } = req.query;
     console.log(search);
     // const hospitals = await Hospital.find()
-     const hospitals = await Hospital.find({
+    const hospitals = await Hospital.find({
       hospitalName: {
         $regex: search,
         $options: "i",
@@ -76,7 +76,7 @@ exports.getAllHospital = async (req, res) => {
 //get  one hospitals
 exports.getOneHospital = async (req, res) => {
   try {
-    const {id} = req.params;
+    const { id } = req.params;
     // const hospitals = await Hospital.find()
     const hospitals = await Hospital.findById(id)
       .populate("stateId", "state")
@@ -140,7 +140,7 @@ exports.approveHospital = async (req, res) => {
     const randomPassword = uuidv4().slice(0, 8);
     const hashedPassword = await bcrypt.hash(randomPassword, 10);
 
-    const user = await new User({
+    const user = new User({
       name: hospital.hospitalName,
       email: hospital.hospitalEmail,
       phone: hospital.hospitalPhone,
@@ -148,6 +148,9 @@ exports.approveHospital = async (req, res) => {
       role: "hospital",
       hospitalId: hospital._id,
     });
+
+    await user.save();
+    
     const hospitals = await Hospital.findByIdAndUpdate(id, { status: "approved" }, { new: true });
     // hospital.status = "approved";
     await hospitals.save();
