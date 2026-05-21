@@ -39,6 +39,21 @@ app.use("/SubDepartment", SubDepartment);
 const DoctorRoute=require('./routes/DoctorRoute')
 app.use("/Doctor", DoctorRoute);
 
+
+const medicineRoute=require('./routes/medicineRoute')
+app.use("/Medicine", medicineRoute);
+
+
+const AddLab=require('./routes/AddLab')
+app.use("/AddLab", AddLab);
+
+
+const TestRoute=require('./routes/TestRoute')
+app.use("/Test", TestRoute);
+
+const TestReportRoute=require('./routes/TestReportRoute')
+app.use("/TestReport", TestReportRoute);
+
 app.listen(Port, () => {
   console.log(`Server running on ${Port}`);
 });

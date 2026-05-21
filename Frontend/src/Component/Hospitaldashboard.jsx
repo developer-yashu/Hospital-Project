@@ -10,6 +10,8 @@ const HospitalDashboard = () => {
   const [totalDepartments, setTotalDepartments] = useState(0);
   const [totalSubDepartments, setTotalSubDepartments] = useState(0);
 
+  const [tests, setTests] = useState([]);
+
   const token = localStorage.getItem("token");
 
   const fetchDoctors = async () => {
@@ -38,32 +40,39 @@ const HospitalDashboard = () => {
     setTotalSubDepartments(res.data.subdepartment.length);
   };
 
+  const fetchtest = async () => {
+    const res = await axios.get("http://127.0.0.1:1010/Test/get-tests", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    console.log(res.data.tests);
+    setTests(res.data.tests);
+  };
+
   useEffect(() => {
     fetchDoctors();
     fetchDepartments();
     fetchSubDepartments();
+    fetchtest();
   }, []);
 
   return (
     <div className="min-h-screen bg-gray-100 p-10">
-
       <div className="flex gap-5 items-center mb-6">
+        <button
+          onClick={() => navigate("/Superadmin")}
+          className="flex items-center gap-2 bg-gray-800 hover:bg-gray-900 text-white px-5 py-2 rounded-xl shadow-md transition duration-300"
+        >
+          <span className="text-lg">⬅</span>Back
+        </button>
 
-      <button
-        onClick={() => navigate("/Superadmin")}
-        className="flex items-center gap-2 bg-gray-800 hover:bg-gray-900 text-white px-5 py-2 rounded-xl shadow-md transition duration-300"
-      >
-        <span className="text-lg">⬅</span>Back
-      </button>
-
-      {/* BUTTON */}
-      <button
-        onClick={() => setShowSidebar(true)}
-        className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl shadow-lg"
-      >
-        Hospital Menu
-      </button>
-    </div>
+        {/* BUTTON */}
+        <button
+          onClick={() => setShowSidebar(true)}
+          className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-xl shadow-lg"
+        >
+          Hospital Menu
+        </button>
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
         <div className="bg-white p-6 rounded-2xl shadow">
@@ -84,6 +93,28 @@ const HospitalDashboard = () => {
             {totalSubDepartments}
           </p>
         </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {tests.map((test) => (
+          <div
+            key={test._id}
+            className="bg-white rounded-2xl shadow-lg p-5 border border-gray-100 hover:shadow-2xl hover:scale-105 transition-all duration-300"
+          >
+            <h3 className="text-xl font-bold text-blue-700 mb-2">
+              🧪 {test.testName}
+            </h3>
+
+            <p className="text-gray-600 mb-1">
+              💰 Charge:{" "}
+              <span className="font-semibold text-green-600">
+                ₹{test.charge}
+              </span>
+            </p>
+
+            <p className="text-gray-500 text-sm">📝 {test.precautions}</p>
+          </div>
+        ))}
       </div>
 
       {/* BACKDROP */}
@@ -139,6 +170,24 @@ const HospitalDashboard = () => {
             className="bg-black hover:bg-gray-800 text-white py-3 rounded-xl transition"
           >
             Subdepartment
+          </button>
+
+          <button
+            onClick={() => {
+              navigate("/lab");
+            }}
+            className="bg-black hover:bg-gray-800 text-white py-3 rounded-xl transition"
+          >
+            Add Lab
+          </button>
+
+          <button
+            onClick={() => {
+              navigate("/test");
+            }}
+            className="bg-black hover:bg-gray-800 text-white py-3 rounded-xl transition"
+          >
+            Test
           </button>
         </div>
       </div>

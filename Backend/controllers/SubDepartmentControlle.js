@@ -7,6 +7,8 @@ exports.addsubdepartment = async (req, res) => {
         res.status(404).json({message: "all filede required",});
     }
     
+    
+
       const subdepartment = new SubDepartment({SubdepartmentName,departmentId,status: "active" });
         console.log('Department',subdepartment);
         

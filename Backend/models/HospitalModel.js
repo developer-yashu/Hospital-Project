@@ -64,10 +64,10 @@ const hospitalSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: "District",
    },
-   // image: {
-   //    type: String,
-   //    // required: true
-   // },
+   image: {
+      type: String,
+      // required: true
+   },
 
    stateId: {
       type: mongoose.Schema.Types.ObjectId,

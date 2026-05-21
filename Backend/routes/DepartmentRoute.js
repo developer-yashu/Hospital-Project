@@ -13,7 +13,7 @@ const superadmin = require("../middleware/adminMiddleware");
 
 
 
-router.post("/add-Department", DepartmentController.addDepartment);
+router.post("/add-Department",auth, DepartmentController.addDepartment);
 router.get("/get-all-Department",DepartmentController.getDepartment);
 router.get("/get-One-Department/:id",DepartmentController.getOneDepartment);
 router.put("/update-Department/:id", DepartmentController.updateDepartment);

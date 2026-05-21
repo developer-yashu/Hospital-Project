@@ -31,8 +31,8 @@ const doctorSchema = new mongoose.Schema(
             type: String,
             required: true
         },
-        address: {
-            type: String,
+        price: {
+            type: Number,
             required: true
         },
         subDepartmentId: {

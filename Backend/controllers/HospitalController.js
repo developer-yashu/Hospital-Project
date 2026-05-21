@@ -14,9 +14,9 @@ const bcrypt = require("bcrypt");
 
 exports.addHospital = async (req, res) => {
   try {
-    // const uploaddata = await upload.uploadImage(req.files)
-    // const image_url = uploaddata[0].url;
-    // console.log("image>>>>>>>>", image_url);
+    const uploaddata = await upload.uploadImage(req.files)
+    const image_url = uploaddata[0].url;
+    console.log("image>>>>>>>>", image_url);
     const { hospitalName, hospitalEmail, hospitalPhone, registrationNumber, emergencyhelpine, totalbad, icubad, operationTheaters, ambulancecount, LicenseNumber, CEO, districtId, stateId, CityId } = req.body;
 
     const alreadyHospital = await Hospital.findOne({ hospitalEmail });
@@ -31,13 +31,14 @@ exports.addHospital = async (req, res) => {
       // const hospital = new Hospital({
       // CityId, districtId, stateId,
       stateId, districtId, CityId, hospitalName, hospitalEmail, hospitalPhone, registrationNumber, emergencyhelpine,
-      totalbad, icubad, operationTheaters, ambulancecount, LicenseNumber, CEO, status: "pending"
+      totalbad, icubad, operationTheaters, ambulancecount, LicenseNumber, CEO, status: "pending", image: image_url
     };
     //  image: image_url,
     console.log("newDoc>>>>>>>>", newDoc);
     // const hospital =
-    await Hospital.create(newDoc);
+    // await Hospital.create(newDoc);
 
+    const hospital = await Hospital.create(newDoc);
     // await hospital.save();
     res.status(201).json({ message: "hospital request submitted", hospital });
   } catch (error) {
@@ -128,6 +129,7 @@ exports.RejectedHospital = async (req, res) => {
 exports.approveHospital = async (req, res) => {
   try {
     const { id } = req.params;
+
     const hospital = await Hospital.findById(id);
     if (!hospital) {
       return res.status(404).json({ message: "Hospital not found" });
@@ -138,33 +140,37 @@ exports.approveHospital = async (req, res) => {
     }
 
     const randomPassword = uuidv4().slice(0, 8);
+    console.log("randomPassword>>>>>>>>", randomPassword);
     const hashedPassword = await bcrypt.hash(randomPassword, 10);
 
-    const user = new User({
+    await User.create({
       name: hospital.hospitalName,
       email: hospital.hospitalEmail,
       phone: hospital.hospitalPhone,
       password: hashedPassword,
       role: "hospital",
-      hospitalId: hospital._id,
+      hospitalId: hospital._id, 
     });
 
-    await user.save();
-    
-    const hospitals = await Hospital.findByIdAndUpdate(id, { status: "approved" }, { new: true });
-    // hospital.status = "approved";
-    await hospitals.save();
-
-    await sendMail(
-      hospitals.hospitalEmail,
-      "Hospital Approved - Login Details",
-      `Email: ${hospitals.hospitalEmail}\nPassword: ${randomPassword}`
+    const updatedHospital = await Hospital.findByIdAndUpdate(
+      id,
+      { status: "approved" },
+      { new: true }
     );
+
+    try {
+      await sendMail(
+        hospital.hospitalEmail,
+        "Hospital Approved - Login Details",
+        `Email: ${hospital.hospitalEmail}\nPassword: ${randomPassword}`
+      );
+    } catch (err) {
+      console.log("MAIL ERROR:", err.message);
+    }
 
     return res.status(200).json({
       message: "Hospital approved successfully",
-      hospitals,
-      user,
+      hospital: updatedHospital,
     });
 
   } catch (error) {

@@ -2,30 +2,34 @@ const HospitalDepartment = require("../models/Department");
 
 exports.addDepartment = async (req, res) => {
   try {
-    const {departmentName,hospitalId} = req.body;
-    if(!(departmentName && hospitalId)){
-        res.status(404).json({message: "all filede required",});
+    const {departmentName} = req.body;
+    if(!departmentName){
+      return   res.status(404).json({message: "departmentName is required",});
     }
+    const  hospitalId = req.user.hospitalId;
     
-      const Department = new HospitalDepartment({departmentName,hospitalId,status: "active" });
-        console.log('Department',Department);
+      const department  = new HospitalDepartment({departmentName,hospitalId,status: "active" });
+        console.log('Department',department );
         
-      await Department.save();
-    res.status(201).json({ message: "Department  submitted", Department });
+      await department.save();
+        return    res.status(201).json({ message: "Department  submitted", department });
   } catch (error) {
-    res.status(500).json({ message: error.message })
+    return res.status(500).json({ message: error.message })
 }
 };
 
 
 exports.getDepartment = async (req, res) => {
-    try {
-        const Department = await HospitalDepartment.find()
-        .populate("hospitalId")
-        res.status(200).json({Department});
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
+  try {
+    
+
+    const Department = await HospitalDepartment.find({}).populate("hospitalId");
+
+    res.status(200).json({ Department });
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
 

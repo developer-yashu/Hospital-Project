@@ -32,13 +32,8 @@ const Department = () => {
     try {
       const data = { departmentName, hospitalId };
       const res = await axios.post(
-        "http://127.0.0.1:1010/Department/add-Department",
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
+        "http://127.0.0.1:1010/Department/add-Department",data,
+        {headers: {Authorization: `Bearer ${token}`,},},
       );
       alert(res.data.message);
       setDepartmentName("");

@@ -31,7 +31,7 @@ const Doctor = () => {
   const [gender, setGender] = useState("");
   const [age, setAge] = useState("");
   const [qualification, setQualification] = useState("");
-  const [address, setAddress] = useState("");
+  const [price, setPrice] = useState("");
   const [hospitalId, setHospitalId] = useState("");
   const [departmentId, setDepartmentId] = useState("");
   const [subDepartmentId, setSubDepartmentId] = useState("");
@@ -67,7 +67,7 @@ const Doctor = () => {
   const getDepartments = async () => {
     try {
       const res = await axios.get("http://127.0.0.1:1010/Department/get-all-department",
-                      { headers: { Authorization: `Bearer ${token}` } },);
+      { headers: { Authorization: `Bearer ${token}` } },);
       setDepartments(res.data.Department);
     } catch (error) {
       console.log(error);
@@ -97,7 +97,7 @@ const Doctor = () => {
       gender,
       age,
       qualification,
-      address,
+      price,
       role: "doctor",
       hospitalId,
       departmentId,
@@ -121,7 +121,7 @@ const Doctor = () => {
       setGender("");
       setAge("");
       setQualification("");
-      setAddress("");
+      setPrice("");
       setHospitalId("");
       setDepartmentId("");
       setSubDepartmentId("");
@@ -186,7 +186,7 @@ const Doctor = () => {
       gender,
       age,
       qualification,
-      address,
+      address: price,
       hospitalId,
       departmentId,
       subDepartmentId,
@@ -272,7 +272,7 @@ const Doctor = () => {
                     setGender(item.gender);
                     setAge(item.age);
                     setQualification(item.qualification);
-                    setAddress(item.address);
+                    setPrice(item.price);
                     setHospitalId(item.hospitalId?._id);
                     setDepartmentId(item.departmentId?._id);
                     setSubDepartmentId(item.subDepartmentId?._id);
@@ -495,8 +495,8 @@ const Doctor = () => {
                   placeholder="Enter address"
                   rows={3}
                   className="w-full border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none p-3 rounded-xl"
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
                 />
               </div>
 
@@ -526,19 +526,19 @@ const Doctor = () => {
                   Department
                 </label>
 
-                <select
-                  className="w-full border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none p-3 rounded-xl"
-                  value={departmentId}
-                  onChange={(e) => setDepartmentId(e.target.value)}
-                >
-                  <option value="">Select Department</option>
+                  <select
+                    className="w-full border border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 outline-none p-3 rounded-xl"
+                    value={departmentId}
+                    onChange={(e) => setDepartmentId(e.target.value)}
+                  >
+                    <option value="">Select Department</option>
 
-                  {departments?.map((item) => (
-                    <option key={item._id} value={item._id}>
-                      {item.departmentName}
-                    </option>
-                  ))}
-                </select>
+                    {departments?.map((item) => (
+                      <option key={item._id} value={item._id}>
+                        {item.departmentName}
+                      </option>
+                    ))}
+                  </select>
               </div>
 
               {/* SUB DEPARTMENT */}
@@ -669,8 +669,8 @@ const Doctor = () => {
               <textarea
                 placeholder="Address"
                 className="border p-3 rounded-xl md:col-span-2"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
               />
 
               <button

@@ -108,6 +108,10 @@ exports.resetPassword = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(newpassword, saltRounds);
     user.password = hashedPassword;
+    console.log(email);
+    console.log(user);
+    console.log(oldpassword);
+    console.log(user.password);
     await user.save();
 
     return res.status(200).json({ message: "Password updated successfully" });
@@ -147,17 +151,17 @@ exports.addAppointment = async (req, res) => {
 
     const userID = req.user.id;
     console.log("userID>>>>>>>>", userID);
-       const doctor = await Doctor.findById(doctorId);
-       console.log("doctor>>>>>>>>", doctor);
-       const hospital = await Hospital.findById(hospitalId);
-        console.log("hospital>>>>>>>>", hospital);
+    const doctor = await Doctor.findById(doctorId);
+    console.log("doctor>>>>>>>>", doctor);
+    const hospital = await Hospital.findById(hospitalId);
+    console.log("hospital>>>>>>>>", hospital);
 
     const newappointment = await new Appointment({ doctorId, userID, hospitalId, appointmentDate, appointmentTime, status: "peasant" });
     await newappointment.save();
     res.status(201).json({ message: "Appointment created successfully", newappointment });
     // return
 
- 
+
 
     // sen user mail
     await sendMail(
@@ -195,22 +199,22 @@ Time: ${appointmentTime}
 
 exports.getAppointments = async (req, res) => {
   try {
-      let filter = {};
+    let filter = {};
 
     // user  login
     if (req.user.role === "user") {
       filter.userID = req.user.id;
     }
 
-        // doctor login 
+    // doctor login 
     if (req.user.role === "doctor") {
-      const doctor = await Doctor.findOne({email: req.user.email});
+      const doctor = await Doctor.findOne({ email: req.user.email });
       filter.doctorId = doctor._id;
     }
 
     // hospital login
-       if (req.user.role === "hospital") {
-      const hospital = await Hospital.findOne({ hospitalEmail: req.user.email});
+    if (req.user.role === "hospital") {
+      const hospital = await Hospital.findOne({ hospitalEmail: req.user.email });
       filter.hospitalId = hospital._id;
     }
 
@@ -220,6 +224,26 @@ exports.getAppointments = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+
+
+
+
+
+
+
+
+
+exports.updateReach = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const appointment = await Appointment.findByIdAndUpdate(id, { isReached: true }, { new: true });
+    res.status(200).json({ message: "Patient reached successfully", appointment });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 
 
 

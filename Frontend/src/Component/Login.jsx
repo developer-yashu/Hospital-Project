@@ -24,9 +24,13 @@ const Login = () => {
       } else if (res.data.role === "hospital") {
         navigate("/hospital-dashboard");
       }
-      if(res.data.role === "user" ||res.data.status== "peasant"){
+       else if (res.data.role === "Doctor") {
+        navigate("/Doctor-dashboard");
+      }
+      else if(res.data.role === "user" ||res.data.status== "peasant"){
         navigate("/");
       } 
+
         // else if (res.data.status== "peasant") {
           
 

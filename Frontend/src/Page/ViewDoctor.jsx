@@ -69,7 +69,7 @@ return (
         <p><b>Gender:</b> {doctor.gender}</p>
         <p><b>Age:</b> {doctor.age}</p>
         <p><b>Qualification:</b> {doctor.qualification}</p>
-        <p className="md:col-span-2"><b>Address:</b> {doctor.address}</p>
+        <p className="md:col-span-2"><b>Price:</b> {doctor.price}</p>
 
         <p><b>Hospital:</b> {doctor.hospitalId?.hospitalName}</p>
         <p><b>Department:</b> {doctor.departmentId?.departmentName}</p>

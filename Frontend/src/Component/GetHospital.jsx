@@ -24,16 +24,12 @@ const GetHospital = () => {
 
   const approveHospital = async (id) => {
     try {
-      const token = localStorage.getItem("token");
+      // const token = localStorage.getItem("token");
 
       const res = await axios.put(
         `http://127.0.0.1:1010/Hospital/approveHospital/${id}`,
         {},
-        {
-          headers: {
-            token: token,
-          },
-        },
+        { headers: { Authorization: `Bearer ${token}` } },
       );
 
       alert(res.data.message);
@@ -48,11 +44,14 @@ const GetHospital = () => {
     try {
       const res = await axios.put(
         `http://127.0.0.1:1010/Hospital/rejected-hospital/${id}`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } },
       );
       alert(res.data.message);
       fetchHospitals();
     } catch (error) {
       console.log(error);
+      alert(error.response?.data?.message);
     }
   };
 
@@ -60,9 +59,15 @@ const GetHospital = () => {
     fetchHospitals();
   }, []);
 
-  const totalBeds = hospitals.reduce((acc, item) => acc + Number(item.totalbad),0);
+  const totalBeds = hospitals.reduce(
+    (acc, item) => acc + Number(item.totalbad),
+    0,
+  );
 
-  const totalICUBeds = hospitals.reduce((acc, item) => acc + Number(item.icubad),0);
+  const totalICUBeds = hospitals.reduce(
+    (acc, item) => acc + Number(item.icubad),
+    0,
+  );
 
   const totalHospitals = hospitals.length;
 
@@ -72,101 +77,81 @@ const GetHospital = () => {
       {/* HEADER */}
       <div className="mb-10">
         {/* TOP BAR */}
-        <div className="bg-white rounded-3xl shadow-md px-6 py-5 flex items-center justify-between border border-gray-100">
+        <div className="bg-white/80 backdrop-blur-md rounded-3xl shadow-lg px-6 py-5 flex flex-wrap md:flex-nowrap items-center justify-between gap-4 border border-gray-100">
           {/* MENU BUTTON */}
           <button
             onClick={() => setShowSidebar(true)}
-            className="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 px-5 py-3 rounded-2xl transition"
+            className="flex items-center gap-2 bg-gray-100 hover:bg-gray-200 px-5 py-3 rounded-2xl transition shadow-sm"
           >
             <span className="text-xl">☰</span>
-
             <span className="font-semibold text-gray-700">Menu</span>
           </button>
 
           {/* TITLE */}
-          <div className="text-center">
-            <h1 className="text-4xl font-extrabold text-gray-800 tracking-wide">
-              All Hospitals
-            </h1>
-          </div>
+          <h1 className="text-2xl md:text-4xl font-extrabold text-gray-800 tracking-wide text-center flex-1">
+            🏥 All Hospitals
+          </h1>
 
-          {/* RIGHT SIDE */}
-          <div className="bg-blue-50 text-blue-600 px-5 py-3 rounded-2xl font-bold text-lg shadow-sm">
-            🏥 {totalHospitals}
-            <p className="text-slate-400">Hospitals</p>
-          </div>
+          {/* STATS */}
+          <div className="flex flex-wrap md:flex-nowrap gap-3">
+            <div className="bg-blue-50 text-blue-600 px-4 py-3 rounded-2xl shadow-sm text-center min-w-[110px]">
+              🏥 <span className="font-bold">{totalHospitals}</span>
+              <p className="text-xs text-gray-500">Hospitals</p>
+            </div>
 
-           <div className="bg-blue-50 text-blue-600 px-5 py-3 rounded-2xl font-bold text-lg shadow-sm">
-              🛏️   {totalBeds} 
-              <p className="text-slate-400">totalBeds</p>
-          </div>
+            <div className="bg-green-50 text-green-600 px-4 py-3 rounded-2xl shadow-sm text-center min-w-[110px]">
+              🛏️ <span className="font-bold">{totalBeds}</span>
+              <p className="text-xs text-gray-500">Beds</p>
+            </div>
 
-          <div className="bg-blue-50 text-blue-600 px-5 py-3 rounded-2xl font-bold text-lg shadow-sm">
-              ❤️ {totalICUBeds}
-              <p className="text-slate-400">ICU Beds</p>
+            <div className="bg-red-50 text-red-600 px-4 py-3 rounded-2xl shadow-sm text-center min-w-[110px]">
+              ❤️ <span className="font-bold">{totalICUBeds}</span>
+              <p className="text-xs text-gray-500">ICU Beds</p>
+            </div>
           </div>
         </div>
       </div>
 
       {/* HOSPITAL LIST */}
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {hospitals.length > 0 ? (
           hospitals.map((item) => (
             <div
               key={item._id}
-              className="bg-white p-5 rounded-2xl shadow-lg border"
+              className="bg-white rounded-2xl border border-gray-100 shadow-md hover:shadow-xl transition duration-300 p-5"
             >
-              {/* HOSPITAL NAME */}
-              <img className="object-cover " src={item.image ||
-               "https://cdn-icons-png.flaticon.com/512/4320/4320337.png"
-            }/>
-              <h1 className="text-2xl font-bold text-gray-800 mb-2">
+              {/* IMAGE */}
+              <img
+                className="w-full h-40 object-cover rounded-xl mb-4 cursor-pointer"
+                src={
+                  item.image ||
+                  "https://cdn-icons-png.flaticon.com/512/4320/4320337.png"
+                }
+                onClick={() => navigate(`/get-one-hospital/${item._id}`)}
+              />
+
+              {/* NAME */}
+              <h1 className="text-xl font-bold text-gray-800">
                 {item.hospitalName}
               </h1>
 
-              {/* EMAIL */}
-              <p className="text-gray-600">📧 {item.hospitalEmail}</p>
+              {/* INFO */}
+              <div className="mt-2 space-y-1 text-sm text-gray-600">
+                {/* <p>📧 {item.hospitalEmail}</p> */}
+                {/* <p>📞 {item.hospitalPhone}</p> */}
+                <p>🚑 {item.emergencyhelpine}</p>
+                <p>🚐 Ambulance: {item.ambulancecount}</p>
+                {/* <p>👨‍⚕ CEO: {item.CEO}</p> */}
 
-              {/* PHONE */}
-              <p className="text-gray-600">📞 {item.hospitalPhone}</p>
-
-              {/* REGISTRATION NUMBER */}
-              {/* <p className="text-gray-600">🆔 {item.registrationNumber}</p> */}
-
-              {/* EMERGENCY */}
-              <p className="text-gray-600">🚑 {item.emergencyhelpine}</p>
-
-              {/* TOTAL BEDS */}
-              {/* <p className="text-gray-600">🛏 Total Beds: {item.totalbad}</p> */}
-
-              {/* ICU BEDS */}
-              {/* <p className="text-gray-600">❤️ ICU Beds: {item.icubad}</p> */}
-
-              {/* OPERATION THEATERS */}
-              <p className="text-gray-600">
-                {/* 🏥 Operation Theaters: {item.operationTheaters} */}
-              </p>
-
-              {/* AMBULANCE */}
-              <p className="text-gray-600">
-                🚐 Ambulances: {item.ambulancecount}
-              </p>
-
-              {/* LICENSE */}
-              {/* <p className="text-gray-600">📜 License: {item.LicenseNumber}</p> */}
-
-              {/* CEO */}
-              <p className="text-gray-600">👨‍⚕ CEO: {item.CEO}</p>
-              <p className="text-gray-600"> state: {item.stateId?.state}</p>
-              <p className="text-gray-600">
-                district : {item.districtId?.district}
-              </p>
-              <p className="text-gray-600">city {item.CityId?.city}</p>
+                <p>📍 State: {item.stateId?.state}</p>
+                <p>🗺️ District: {item.districtId?.district}</p>
+                <p>🏙️ City: {item.CityId?.city}</p>
+              </div>
 
               {/* STATUS */}
               <div className="mt-4">
                 <span
-                  className={`px-4 py-1 rounded-full text-white text-sm ${
+                  className={`inline-block px-3 py-1 rounded-full text-xs font-semibold text-white ${
                     item.status === "approved"
                       ? "bg-green-500"
                       : item.status === "rejected"
@@ -174,25 +159,25 @@ const GetHospital = () => {
                         : "bg-yellow-500"
                   }`}
                 >
-                  Status {item.status}
+                  {item.status.toUpperCase()}
                 </span>
               </div>
 
-              <div className="flex gap-3 mt-3">
+              {/* ACTIONS */}
+              <div className="flex gap-2 mt-4">
                 <button
                   onClick={() => approveHospital(item._id)}
-                  className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg"
+                  className="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg text-sm transition"
                 >
                   Approve
                 </button>
-                {/* {item.status === "pending" && ( */}
+
                 <button
                   onClick={() => rejectHospital(item._id)}
-                  className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg"
+                  className="flex-1 bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg text-sm transition"
                 >
                   Reject
                 </button>
-                {/* // )} */}
               </div>
             </div>
           ))
@@ -214,9 +199,12 @@ const GetHospital = () => {
         className={`fixed top-0 left-0 h-full w-64 bg-white border-r border-gray-100 z-50 flex flex-col transform transition-transform duration-300 ${showSidebar ? "translate-x-0" : "-translate-x-full"}`}
       >
         <div className="flex items-center justify-between px-4 py-4 border-b border-gray-100">
-          <h2 className="text-base font-semibold text-gray-800" onClick={() => {
+          <h2
+            className="text-base font-semibold text-gray-800"
+            onClick={() => {
               navigate("/Superadmin");
-            }} >
+            }}
+          >
             Add location
           </h2>
           <button

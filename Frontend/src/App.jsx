@@ -20,6 +20,12 @@ import ViewDoctor from "./Page/ViewDoctor";
 import ViewDefaultPage from './Page/ViewDefaultPage';
 import ProtectedRoute from "./Component/ProtectedRoute";
 import AppointmentHistory from "./Page/AppointmentHistory";
+import UserMedicines from "./Page/UserMedicines";
+import DoctorMedicine from "./Page/DoctorMedicine";
+import GetOneHospital from "./Component/GetOneHospital";
+import Lab from "./Component/Lab";
+import Test from "./Page/Test";
+import Doctordashboard from "./Component/Doctordashboard";
 
 
 const App = () => {
@@ -46,12 +52,23 @@ const App = () => {
               <Route path="/City" element={<City/>}/>
               <Route path="/addhospital" element={<AddHospital/>}/>
               <Route path="/gethospital" element={<GetHospital/>}/>
+              <Route path="/get-one-hospital/:hospitalId" element={<GetOneHospital/>}/>
+
               <Route path="/hospital-dashboard" element={<Hospitaldashboard/>}/>
               <Route path="/Department" element={<Department/>}/>
               <Route path="/SubDepartment" element={<SubDepartment/>}/>
               <Route path="/doctor" element={<Doctor/>}/>
+              <Route path="/Doctor-dashboard" element={<Doctordashboard/>}/>
+
               <Route path="/doctor/:id" element={<ViewDoctor/>} />
               <Route path="/AppointmentHistory" element={<AppointmentHistory/>} />
+              <Route path="/user-medicines"element={<UserMedicines/>}/>
+              <Route path="/doctor-medicines" element={<DoctorMedicine/>}/>
+              <Route path="/lab" element={<Lab/>}/>
+              <Route path="/test" element={<Test/>}/>
+
+
+
 
 
 

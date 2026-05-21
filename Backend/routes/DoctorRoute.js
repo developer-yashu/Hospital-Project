@@ -20,5 +20,9 @@ router.put("/restore-Doctor/:id", DoctorController.restore);
 router.delete("/delete-Doctor/:id", DoctorController.deletedoctor);
 
 
+
+
+
+
 module.exports = router;
 

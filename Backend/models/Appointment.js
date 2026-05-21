@@ -1,32 +1,37 @@
-const mongoosh=require('mongoose')
+const mongoosh = require('mongoose')
 
 
-const appointmentSchema=new mongoosh.Schema({
-    doctorId:{
+const appointmentSchema = new mongoosh.Schema({
+    doctorId: {
         type: mongoosh.Schema.Types.ObjectId,
-        ref:"Doctor",
+        ref: "Doctor",
     },
-    userID:{
+    userID: {
         type: mongoosh.Schema.Types.ObjectId,
-        ref:"User",         
+        ref: "User",
     },
-    hospitalId:{
+    hospitalId: {
         type: mongoosh.Schema.Types.ObjectId,
-        ref:"Hospital",
+        ref: "Hospital",
     },
-    appointmentDate:{
+    appointmentDate: {
         type: Date,
         required: true,
     },
-    appointmentTime:{
+    appointmentTime: {
         type: String,
         enum: ["9-11", "1-3", "7-9"],
         default: "9-11",
     },
-    status:{
+    status: {
         type: String,
         default: "peasant",
     },
-},{timestamps:true,versionKey:false})
+    isReached: {
+        type: Boolean,
+        default: false,
+    },
+    
+}, { timestamps: true, versionKey: false })
 
-module.exports=mongoosh.model("Appointment",appointmentSchema)
+module.exports = mongoosh.model("Appointment", appointmentSchema)

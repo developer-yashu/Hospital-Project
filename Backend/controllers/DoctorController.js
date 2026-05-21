@@ -18,8 +18,8 @@ exports.addDoctor = async (req, res) => {
         console.log("image>>>>>>>>", image_url);
 
 
-        const { name, email, phone, experience, gender, age, qualification, address, departmentId, hospitalId, subDepartmentId,} = req.body;
-        if (!(name && email && phone && experience && gender && age && qualification && address && departmentId && subDepartmentId && hospitalId)) {
+        const { name, email, phone, experience, gender, age, qualification, price, departmentId, hospitalId, subDepartmentId,} = req.body;
+        if (!(name && email && phone && experience && gender && age && qualification && price && departmentId && subDepartmentId && hospitalId)) {
             return res.status(400).json({ message: "all filede required", });
         }
 
@@ -33,7 +33,7 @@ exports.addDoctor = async (req, res) => {
 
         const newDoc = {
             name, email, phone, experience, gender, age,
-            qualification, address, departmentId, subDepartmentId, hospitalId,image:image_url ,status: "active"
+            qualification, price, departmentId, subDepartmentId, hospitalId,image:image_url ,status: "active"
         }
         console.log("o", newDoc)
         const doctor = await Doctor.create(newDoc);
@@ -43,6 +43,7 @@ exports.addDoctor = async (req, res) => {
         // await doctor.save();
 
         const randomPassword = uuidv4().slice(0, 8);
+        console.log("randomPassword>>>>>>>>", randomPassword);
         const hashedPassword = await bcrypt.hash(randomPassword, 10);
 
         const user = await new User({
@@ -175,3 +176,6 @@ exports.getDoctorByHospital = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 }
+
+
+
