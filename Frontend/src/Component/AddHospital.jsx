@@ -2,6 +2,8 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 
 const AddHospital = () => {
+  const token = localStorage.getItem("token");
+
   const [hospitalName, setHospitalName] = useState("");
   const [hospitalEmail, setHospitalEmail] = useState("");
   const [hospitalPhone, setHospitalPhone] = useState("");
@@ -82,7 +84,7 @@ const AddHospital = () => {
       };
 
       const res = await axios.post("http://127.0.0.1:1010/Hospital/add-hospital",
-        data,);
+        data, {headers: {Authorization: `Bearer ${token}`,},});
       alert(res.data.message);
 
       // empty form
@@ -243,7 +245,8 @@ const AddHospital = () => {
           <select
             className="border p-2 rounded-lg text-sm"
             value={districtId}
-            onChange={(e) => {setDistrictId(e.target.value);
+            onChange={(e) => {
+              setDistrictId(e.target.value);
               setCityId("");
               fetchCities(e.target.value);
             }}
@@ -259,8 +262,10 @@ const AddHospital = () => {
           <select
             className="border p-2 rounded-lg text-sm"
             value={CityId}
-            onChange={(e) => {setCityId(e.target.value)}}
-    >
+            onChange={(e) => {
+              setCityId(e.target.value);
+            }}
+          >
             <option value="">Select City</option>
             {cities.map((item) => (
               <option key={item._id} value={item._id}>

@@ -7,8 +7,9 @@ const auth = require("../middleware/auth");
 const superadmin = require("../middleware/adminMiddleware");
 
 
-router.post("/add-Doctor", DoctorController.addDoctor);
-router.get("/get-all-Doctor",DoctorController.getdoctors);
+router.post("/add-Doctor",DoctorController.addDoctor);
+router.get("/get-all-Doctor",auth,DoctorController.getdoctors);
+router.get("/get-all-public-doctor",DoctorController.getAllDoctorsPublic);
 router.get("/get-all-Doctor-by-hospital/:hospitalId",DoctorController.getDoctorByHospital);
 
 router.get("/get-One-Doctor/:id",DoctorController.getOnedoctors);

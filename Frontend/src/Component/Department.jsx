@@ -53,11 +53,7 @@ const Department = () => {
       const res = await axios.put(
         `http://127.0.0.1:1010/Department/update-Department/${editId}`,
         { departmentName: updateDepartmentName },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
+        {headers: {Authorization: `Bearer ${token}`, },},
       );
 
       alert(res.data.message);
@@ -77,11 +73,7 @@ const Department = () => {
     try {
       const res = await axios.get(
         "http://127.0.0.1:1010/Department/get-all-Department",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
+        {headers: {Authorization: `Bearer ${token}`,},},
       );
       setDepartments(res.data.Department);
     } catch (error) {

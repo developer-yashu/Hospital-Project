@@ -32,6 +32,7 @@ const City = () => {
   const fetchStates = async () => {
     try {
       const res = await axios.get("http://127.0.0.1:1010/location/get-state");
+
       setStates(res.data.states);
     } catch (error) {
       console.log(error);
@@ -44,6 +45,7 @@ const City = () => {
       const res = await axios.get(
         `http://127.0.0.1:1010/location/getDistrictByState/${stateId}`,
       );
+      console.log(">>>>>>>>>>>",res.data);
       setDistricts(res.data.districts);
     } catch (error) {
       console.log(error);
@@ -92,6 +94,7 @@ const City = () => {
       await axios.delete(
         `http://127.0.0.1:1010/location/delete-city-one/${id}`,
       );
+      
       alert("City Deleted");
       fetchCities();
     } catch (error) {

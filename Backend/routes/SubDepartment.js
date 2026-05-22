@@ -10,7 +10,7 @@ const superadmin = require("../middleware/adminMiddleware");
 
 
 router.post("/add-subdepartment", SubDepartmentControlle.addsubdepartment);
-router.get("/get-all-subdepartment",SubDepartmentControlle.getsubdepartment);
+router.get("/get-all-subdepartment",auth, SubDepartmentControlle.getsubdepartment);
 
 router.get("/get-One-subdepartment/:id",SubDepartmentControlle.getOnesubdepartment);
 router.put("/update-subdepartment/:id", SubDepartmentControlle.updatesubdepartment);

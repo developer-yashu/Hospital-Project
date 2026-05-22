@@ -1,94 +1,109 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react";
 
 const Login = () => {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [show, setShow] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    const data = { email, password };
+
+    setLoading(true);
+
     try {
-      const res = await axios.post("http://127.0.0.1:1010/superadmin/superadmin-login",data);
-      console.log(res.data);
+      const res = await axios.post(
+        "http://127.0.0.1:1010/superadmin/superadmin-login",
+        { email, password }
+      );
 
       localStorage.setItem("token", res.data.token);
-      console.log(res.data);
+
       alert("Login Success");
 
-      if (res.data.role === "superadmin") {
-        navigate("/Superadmin");
-      } else if (res.data.role === "hospital") {
-        navigate("/hospital-dashboard");
-      }
-       else if (res.data.role === "Doctor") {
-        navigate("/Doctor-dashboard");
-      }
-      else if(res.data.role === "user" ||res.data.status== "peasant"){
-        navigate("/");
-      } 
+      const role = res.data.role;
 
-        // else if (res.data.status== "peasant") {
-          
-
+      if (role === "superadmin") navigate("/Superadmin");
+      else if (role === "hospital") navigate("/hospital-dashboard");
+      else if (role === "doctor") navigate("/Doctor-dashboard");
+      else navigate("/");
 
     } catch (error) {
-      console.log(error);
-alert(error.response?.data?.message); 
-   }
+      alert(error.response?.data?.message || "Login Failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-cyan-200 p-4">
+
       <form
         onSubmit={handleLogin}
-        className="bg-white p-8 rounded-xl shadow-lg w-[400px]"
+        className="w-full max-w-md bg-white/80 backdrop-blur-lg shadow-2xl rounded-3xl p-8 border border-white"
       >
-        <h1 className="text-3xl font-bold text-center mb-6">Login Page</h1>
 
+        <h1 className="text-4xl font-extrabold text-center text-blue-700 mb-8">
+          Welcome Back 👋
+        </h1>
+
+        {/* EMAIL */}
         <input
           type="email"
           placeholder="Enter Email"
-          className="w-full border p-3 rounded-lg mb-4"
+          className="w-full border p-4 rounded-xl mb-4 outline-none focus:ring-2 focus:ring-blue-500"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
 
-        <input
-          type="password"
-          placeholder="Enter Password"
-          className="w-full border p-3 rounded-lg mb-4"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        {/* PASSWORD */}
+        <div className="relative mb-6">
+          <input
+            type={show ? "text" : "password"}
+            placeholder="Enter Password"
+            className="w-full border p-4 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 pr-12"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
 
+          <button
+            type="button"
+            onClick={() => setShow(!show)}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600"
+          >
+            {show ? <EyeOff /> : <Eye />}
+          </button>
+        </div>
+
+        {/* BUTTON */}
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700"
+          disabled={loading}
+          className="w-full bg-blue-600 text-white p-4 rounded-xl font-bold hover:bg-blue-700 transition duration-300 flex justify-center items-center"
         >
-          Login
+          {loading ? "Logging in..." : "Login"}
         </button>
 
-        <div className="flex justify-between items-center mt-4">
-          <Link
-            to="/reset-password"
-            className="text-blue-600 hover:text-blue-800 font-semibold underline"
-          >
-            Reset Password
+        {/* LINKS */}
+        <div className="flex justify-between mt-5 text-sm">
+
+          <Link to="/reset-password" className="text-blue-600 hover:underline">
+            Forgot Password?
           </Link>
 
-          <Link
-            to="/signup"
-            className="text-green-600 hover:text-green-800 font-semibold underline"
-          >
-            Signup
+          <Link to="/signup" className="text-green-600 hover:underline">
+            Create Account
           </Link>
+
         </div>
 
       </form>
+
     </div>
   );
 };

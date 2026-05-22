@@ -158,7 +158,7 @@ exports.addAppointment = async (req, res) => {
 
     const newappointment = await new Appointment({ doctorId, userID, hospitalId, appointmentDate, appointmentTime, status: "peasant" });
     await newappointment.save();
-    res.status(201).json({ message: "Appointment created successfully", newappointment });
+    return  res.status(201).json({ message: "Appointment created successfully", newappointment });
     // return
 
 
@@ -167,12 +167,11 @@ exports.addAppointment = async (req, res) => {
     await sendMail(
       req.user.email,
       "Appointment Booked",
-      `
-        Your appointment is confirmed
-   Doctor: ${doctor.name}
-Hospital: ${hospital.hospitalName}
-Date: ${appointmentDate}
-Time: ${appointmentTime}
+      `Your appointment is confirmed
+      Doctor: ${doctor.name}
+      Hospital: ${hospital.hospitalName}
+      Date: ${appointmentDate}
+      Time: ${appointmentTime}
         `
     );
 
@@ -181,9 +180,7 @@ Time: ${appointmentTime}
     await sendMail(
       doctor.email,
       "New Appointment",
-      `
-      You have a new appointment
-
+      `You have a new appointment
       Patient: ${req.user.name}
       Date: ${appointmentDate}
       Time: ${appointmentTime}`

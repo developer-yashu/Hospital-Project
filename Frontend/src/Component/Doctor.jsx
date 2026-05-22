@@ -89,27 +89,13 @@ const Doctor = () => {
   const addDoctor = async (e) => {
     e.preventDefault();
 
-    const data = {
-      name,
-      email,
-      phone,
-      experience,
-      gender,
-      age,
-      qualification,
-      price,
-      role: "doctor",
-      hospitalId,
-      departmentId,
-      subDepartmentId,
-      image,
-    };
+    const data = {name,email,phone,experience,gender,age,qualification,price,role: "doctor",hospitalId,
+      departmentId,subDepartmentId,image};
     try {
       const res = await axios.post(
         "http://127.0.0.1:1010/Doctor/add-Doctor",
-        data,
-         { headers: { Authorization: `Bearer ${token}`}
-        },
+        data,{headers:{Authorization: `Bearer ${token}`}
+},
       );
 
       alert(res.data.message);
@@ -186,7 +172,7 @@ const Doctor = () => {
       gender,
       age,
       qualification,
-      address: price,
+      price,
       hospitalId,
       departmentId,
       subDepartmentId,

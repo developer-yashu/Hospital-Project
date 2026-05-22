@@ -29,11 +29,9 @@ const DefaultPage = () => {
   // GET DOCTORS
   const getDoctors = async () => {
     try {
-      const res = await axios.get(
-        `http://127.0.0.1:1010/Doctor/get-all-Doctor?search=${search}`
-      );
-
-      setDoctors(res.data.doctors);
+      const res = await axios.get(`http://127.0.0.1:1010/Doctor/get-all-public-doctor?search=${search}`);
+        console.log("res.data.doctors>>>>>>",res.data.doctors)
+        setDoctors(res.data.doctors);
     } catch (error) {
       console.log(error);
     }

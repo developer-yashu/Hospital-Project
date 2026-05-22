@@ -41,8 +41,8 @@ const SubDepartment = () => {
           SubdepartmentName: subDepartmentName,
           departmentId: selectedDepartmentId,
         },
-        { headers: { token } },
-      );
+              { headers: { Authorization: `Bearer ${token}` } },);
+
       alert(res.data.message);
 
       setSubDepartmentName("");
@@ -66,8 +66,9 @@ const SubDepartment = () => {
           SubdepartmentName: updateSubDepartmentName,
           departmentId: updateSelectedDepartmentId,
         },
-        { headers: { token } },
-      );
+              { headers: { Authorization: `Bearer ${token}` } },);
+
+ 
       alert(res.data.message);
 
       setEditId("");
@@ -88,7 +89,10 @@ const SubDepartment = () => {
     try {
       const res = await axios.get(
         `http://127.0.0.1:1010/SubDepartment/get-all-subDepartment?search=${search}`,
+       { headers: { Authorization: `Bearer ${token}` } },
       );
+      console.log(res.data.subdepartment)
+
       setSubDepartment(res.data.subdepartment);
     } catch (error) {
       console.log(error);
@@ -100,7 +104,8 @@ const SubDepartment = () => {
     try {
       const res = await axios.get(
         "http://127.0.0.1:1010/Department/get-all-department",
-      );
+           { headers: { Authorization: `Bearer ${token}` } },);
+
       setDepartments(res.data.Department);
     } catch (error) {
       console.log(error);

@@ -68,7 +68,7 @@ exports.deleteTest = async (req, res) => {
 };
 
 
-// rejected labs// SOFT DELETE
+// SOFT DELETE
 exports.softDelete = async (req, res) => {
     try {
         const { id } = req.params;

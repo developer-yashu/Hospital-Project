@@ -1,47 +1,104 @@
 const SubDepartment = require("../models/SubDepartment");
+const Department = require("../models/Department");
+
+// const 
 
 exports.addsubdepartment = async (req, res) => {
-  try {
-    const {SubdepartmentName,departmentId} = req.body;
-      if(!(SubdepartmentName && departmentId)){
-        res.status(404).json({message: "all filede required",});
+    try {
+        const { SubdepartmentName, departmentId } = req.body;
+        if (!(SubdepartmentName && departmentId)) {
+            res.status(404).json({ message: "all filede required", });
+        }
+
+
+
+        const subdepartment = new SubDepartment({ SubdepartmentName, departmentId, status: "active" });
+        console.log('Department', subdepartment);
+
+        await subdepartment.save();
+        res.status(201).json({ message: "subdepartment  submitted", subdepartment });
+    } catch (error) {
+        res.status(500).json({ message: error.message })
+
     }
-    
-    
-
-      const subdepartment = new SubDepartment({SubdepartmentName,departmentId,status: "active" });
-        console.log('Department',subdepartment);
-        
-      await subdepartment.save();
-    res.status(201).json({ message: "subdepartment  submitted", subdepartment });
-  } catch (error) {
-    res.status(500).json({ message: error.message })
-
-}
 };
+
+
+// exports.getsubdepartment = async (req, res) => {
+//     try {
+//         const { search = "" } = req.query;
+//         // const   {hospitalId}= req.user;
+      
+
+//         const subdepartment = await SubDepartment.find({
+
+//             SubdepartmentName: {
+//                 $regex: search, $options: "i"
+
+//             }
+//         })
+//             .populate("departmentId");
+//         res.status(200).json({ subdepartment });
+//     } catch (error) {
+//         res.status(500).json({ message: error.message });
+//     }
+// };
+
 
 
 exports.getsubdepartment = async (req, res) => {
-    try {
-        const {search=""} = req.query;
-        const subdepartment = await SubDepartment.find({ 
-            SubdepartmentName: { $regex: search, $options: "i" 
-                
-            } })
-         .populate("departmentId");
-        res.status(200).json({subdepartment});
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-};
 
+    try {
+
+        const { search = "" } = req.query;
+
+        let filter = {
+            SubdepartmentName: {
+                $regex: search,
+                $options: "i"
+            }
+        };
+
+        // hospital login
+        if (req.user.role === "hospital") {
+             const {hospitalId}= req.user;
+             const departments = await Department.find({hospitalId});
+
+            // sirf ids nikalo
+            const departmentIds = departments.map(item => item._id);
+
+            // subdepartment filter
+            filter.departmentId = {
+                $in: departmentIds
+            };
+
+        }
+
+        // superadmin => all data
+
+        const subdepartment = await SubDepartment.find(filter)
+            .populate("departmentId");
+
+        res.status(200).json({
+            subdepartment
+        });
+
+    } catch (error) {
+
+        res.status(500).json({
+            message: error.message
+        });
+
+    }
+
+};
 
 exports.getOnesubdepartment = async (req, res) => {
     try {
-        const {id}=req.params;
+        const { id } = req.params;
         const subdepartment = await SubDepartment.findById(id)
-         .populate("departmentId");
-        res.status(200).json({subdepartment});
+            .populate("departmentId");
+        res.status(200).json({ subdepartment });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -100,4 +157,3 @@ exports.restoresubdepartment = async (req, res) => {
 };
 
 
-  

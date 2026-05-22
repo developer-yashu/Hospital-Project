@@ -10,16 +10,16 @@ exports.addMedicine = async (req, res) => {
         }
 
         const appointment = await Appointment.findById(AppointmentId);
-             console.log("appointment >>>>", appointment);
+        console.log("appointment >>>>", appointment);
         if (!appointment) {
             return res.status(404).json({ message: "Appointment not found" });
         }
-          const { testId } = req.body;
+        const { testId } = req.body;
         const newMedicine = new medicine({
             medicineName, medicineType, price, description, DiseaseName, Food_Restrictions, AppointmentId, nextAppointmentDate,
             doctorId: appointment.doctorId,
             userId: appointment.userID,
-            testId: testId 
+            testId: testId
         });
         await newMedicine.save();
         res.status(201).json({ message: "Medicine added successfully", medicine: newMedicine });
@@ -37,18 +37,18 @@ exports.addMedicine = async (req, res) => {
 
 
 
-    exports.getMedicines = async (req, res) => {
-        try {
-            const medicines = await medicine.find({ userId: req.user._id})
-                .populate("doctorId")
-                .populate("AppointmentId")
-                .populate("testId");
+exports.getMedicines = async (req, res) => {
+    try {
+        const medicines = await medicine.find({ userId: req.user._id })
+            .populate("doctorId")
+            .populate("AppointmentId")
+            .populate("testId");
 
-            return res.status(200).json({ medicines });
-        } catch (error) {
+        return res.status(200).json({ medicines });
+    } catch (error) {
         return res.status(500).json({ message: error.message });
-        }
-    };
+    }
+};
 
 
 
@@ -62,7 +62,7 @@ exports.getDoctorMedicines = async (req, res) => {
             .populate("AppointmentId")
             .populate("testId");
 
-       return res.status(200).json({ medicines });
+        return res.status(200).json({ medicines });
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }

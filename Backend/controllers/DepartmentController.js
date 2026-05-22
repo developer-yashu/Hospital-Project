@@ -22,8 +22,8 @@ exports.addDepartment = async (req, res) => {
 exports.getDepartment = async (req, res) => {
   try {
     
-
-    const Department = await HospitalDepartment.find({}).populate("hospitalId");
+    const   {hospitalId}= req.user;
+    const Department = await HospitalDepartment.find({hospitalId}).populate("hospitalId");
 
     res.status(200).json({ Department });
 

@@ -73,8 +73,9 @@ exports.addDoctor = async (req, res) => {
 
 exports.getdoctors = async (req, res) => {
     try {
+        const   {hospitalId}= req.user;
         const { search = "" } = req.query;
-        const doctors = await Doctor.find({
+        const doctors = await Doctor.find({hospitalId,
             name: {
                 $regex: search,
                 $options: "i",}})
@@ -86,6 +87,29 @@ exports.getdoctors = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
+};
+
+
+
+exports.getAllDoctorsPublic = async (req, res) => {
+  try {
+    const { search = "" } = req.query;
+
+    const doctors = await Doctor.find({
+      name: {
+        $regex: search,
+        $options: "i",
+      },
+    })
+      .populate("departmentId")
+      .populate("hospitalId")
+      .populate("subDepartmentId");
+
+    res.status(200).json({ doctors });
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
 

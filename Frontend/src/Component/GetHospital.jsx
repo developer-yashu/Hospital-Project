@@ -164,21 +164,39 @@ const GetHospital = () => {
               </div>
 
               {/* ACTIONS */}
-              <div className="flex gap-2 mt-4">
-                <button
-                  onClick={() => approveHospital(item._id)}
-                  className="flex-1 bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg text-sm transition"
-                >
-                  Approve
-                </button>
+             <div className="mt-4">
+  <select
+    value={item.status}
+    onChange={(e) => {
+      if (e.target.value === "approved") {
+        approveHospital(item._id);
+      }
 
-                <button
-                  onClick={() => rejectHospital(item._id)}
-                  className="flex-1 bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg text-sm transition"
-                >
-                  Reject
-                </button>
-              </div>
+      if (e.target.value === "rejected") {
+        rejectHospital(item._id);
+      }
+    }}
+    className={`w-full py-2 px-3 rounded-xl border text-sm font-semibold outline-none transition
+      ${
+        item.status === "approved"
+          ? "bg-green-100 text-green-700 border-green-300"
+          : item.status === "rejected"
+            ? "bg-red-100 text-red-700 border-red-300"
+            : "bg-yellow-100 text-yellow-700 border-yellow-300"
+      }
+    `}
+  >
+    <option value="pending">Pending</option>
+
+    <option value="approved">
+      Approved
+    </option>
+
+    <option value="rejected">
+      Rejected
+    </option>
+  </select>
+</div>
             </div>
           ))
         ) : (
