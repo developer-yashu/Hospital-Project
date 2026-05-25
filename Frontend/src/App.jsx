@@ -26,6 +26,7 @@ import GetOneHospital from "./Component/GetOneHospital";
 import Lab from "./Component/Lab";
 import Test from "./Page/Test";
 import Doctordashboard from "./Component/Doctordashboard";
+import TestDashboard from "./Page/TestDashboard";
 
 
 const App = () => {
@@ -66,6 +67,9 @@ const App = () => {
               <Route path="/doctor-medicines" element={<DoctorMedicine/>}/>
               <Route path="/lab" element={<Lab/>}/>
               <Route path="/test" element={<Test/>}/>
+              <Route path="/TestDashboard" element={<TestDashboard/>}/>
+
+
 
 
 

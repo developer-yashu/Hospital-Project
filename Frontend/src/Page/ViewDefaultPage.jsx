@@ -57,35 +57,85 @@ const ViewDefaultPage = () => {
     );
   }
 
-  const handleAppointment = async (doctorId) => {
-    const token = localStorage.getItem("token");
-    const time = appointmentTime[doctorId];
+  // const handleAppointment = async (doctorId) => {
+  //   const token = localStorage.getItem("token");
+  //   const time = appointmentTime[doctorId];
 
-    if (!token) {
-      navigate("/login");
-      return;
-    }
-    try {
-      const data = {
-        doctorId,
-        hospitalId,
-        appointmentDate: new Date().toISOString().split("T")[0],
-        appointmentTime: time,
-      };
-      const res = await axios.post(
-        "http://127.0.0.1:1010/superadmin/add-appointment",
-        data,
-        { headers: { Authorization: `Bearer ${token}` } },
-      );
+  //   if (!token) {
+  //     navigate("/login");
+  //     return;
+  //   }
+  //   try {
+  //     const data = {
+  //       doctorId,
+  //       hospitalId,
+  //       appointmentDate: new Date().toISOString().split("T")[0],
+  //       appointmentTime: time,
+  //     };
+  //     const res = await axios.post(
+  //       "http://127.0.0.1:1010/superadmin/add-appointment",
+  //       data,
+  //       { headers: { Authorization: `Bearer ${token}` } },
+  //     );
 
-      alert("Appointment Booked Successfully");
+  //     alert("Appointment Booked Successfully");
 
-      console.log(res.data);
-    } catch (error) {
-      console.log(error);
-      alert(error.response?.data?.message || "Appointment failed");
-    }
-  };
+  //     console.log(res.data);
+  //   } catch (error) {
+  //     console.log(error);
+  //     alert(error.response?.data?.message || "Appointment failed");
+  //   }
+  // };
+
+
+const handleAppointment = async (doctorId) => {
+  const token = localStorage.getItem("token");
+  const role = localStorage.getItem("role");
+
+  // LOGIN NAHI
+  if (!token) {
+    navigate("/login");
+    return;
+  }
+
+  // ONLY USER ALLOWED
+  if (role !== "user") {
+    alert("Only User Can Book Appointment");
+     navigate("/login");  
+    return;
+  }
+
+  const time = appointmentTime[doctorId];
+
+  try {
+    const data = {
+      doctorId,
+      hospitalId,
+      appointmentDate: new Date().toISOString().split("T")[0],
+      appointmentTime: time,
+    };
+
+    const res = await axios.post(
+      "http://127.0.0.1:1010/superadmin/add-appointment",
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    alert("Appointment Booked Successfully");
+
+    console.log(res.data);
+
+  } catch (error) {
+    console.log(error);
+
+    alert(error.response?.data?.message || "Appointment failed");
+  }
+};
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-gray-100 py-10 px-4">

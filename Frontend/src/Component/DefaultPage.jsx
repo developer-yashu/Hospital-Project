@@ -93,6 +93,12 @@ const DefaultPage = () => {
             🏥 By Hospital
           </button>
 
+            <button onClick={()=>navigate('/AppointmentHistory')}
+              className="px-5 py-3 rounded-2xl font-semibold transition duration-300 bg-blue-600 text-white shadow-lg"
+              >
+              AppointmentHistory
+            </button>
+
         </div>
       </div>
 

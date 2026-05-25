@@ -23,6 +23,7 @@ const Login = () => {
       );
 
       localStorage.setItem("token", res.data.token);
+      localStorage.setItem("role", res.data.role);
 
       alert("Login Success");
 
@@ -31,6 +32,8 @@ const Login = () => {
       if (role === "superadmin") navigate("/Superadmin");
       else if (role === "hospital") navigate("/hospital-dashboard");
       else if (role === "doctor") navigate("/Doctor-dashboard");
+      else if (role === "lab") navigate("/TestDashboard");
+
       else navigate("/");
 
     } catch (error) {

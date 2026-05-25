@@ -1,5 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+
 
 const Doctordashboard = () => {
   const [tests, setTests] = useState([]);
@@ -44,6 +46,13 @@ return (
       <h1 className="text-4xl font-extrabold text-blue-700">
         🩺 Doctor Dashboard
       </h1>
+
+           <Link
+                    to="/AppointmentHistory"
+                    className="px-6 py-3 rounded-xl bg-green-600 text-white font-semibold shadow-lg hover:bg-green-700"
+                  >
+                    👨‍⚕️AppointmentHistory
+                  </Link>
       <p className="text-gray-500 mt-2">
         Manage Tests & Labs efficiently
       </p>

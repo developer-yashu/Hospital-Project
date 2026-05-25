@@ -11,9 +11,9 @@ const testSchema = new mongoose.Schema(
             type: Number,
             required: true,
         },
-        precautions: { 
+        precautions: {
             type: String,
-             required: true 
+            required: true
         },
 
 
@@ -32,6 +32,7 @@ const testSchema = new mongoose.Schema(
             enum: ["active", "inactive"],
             default: "active",
         },
+        departmentId: { type: mongoose.Schema.Types.ObjectId, ref: "Department", },
     },
     {
         timestamps: true,

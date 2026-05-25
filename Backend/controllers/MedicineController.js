@@ -56,7 +56,10 @@ exports.getMedicines = async (req, res) => {
 
 exports.getDoctorMedicines = async (req, res) => {
     try {
-        const medicines = await medicine.find({ doctorId: req.user.doctorId })
+        // const medicines = await medicine.find({ doctorId: req.user.doctorId })
+        console.log("req.user >>>", req.user);
+        const medicines = await medicine .find({ doctorId: req.user._id})
+        
             .populate("userId")
             .populate("doctorId")
             .populate("AppointmentId")
