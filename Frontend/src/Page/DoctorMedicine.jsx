@@ -100,6 +100,13 @@ const DoctorMedicine = () => {
               </span>
             </p>
 
+             <p>
+              📝 Test :
+              <span className="font-bold">
+                {" "}
+                {item.testId.testName}
+              </span>
+            </p>
             
 
           </div>

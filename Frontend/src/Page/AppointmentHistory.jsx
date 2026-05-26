@@ -377,7 +377,7 @@ const AppointmentHistory = () => {
         }
       );
 
-      console.log(res.data.appointments);
+      console.log("res.data.appointments>>>>>",res.data.appointments);
 
       setAppointments(res.data.appointments);
 
@@ -463,9 +463,7 @@ const AppointmentHistory = () => {
 
 
 
-  // =========================
-  // GET TESTS
-  // =========================
+  //getTests
 
   const getTests = async () => {
 

@@ -121,6 +121,24 @@ exports.resetPassword = async (req, res) => {
 };
 
 
+
+exports.Forget = async (req, res) => {
+  const { email, password } = req.body
+  const user = await User.findOne({ email });
+  if (!user) {
+    return res.status(404).json({ message: "signup first" });
+  }
+
+  const hashedPassword = await bcrypt.hash(password, saltRounds);
+  console.log("hashedPassword",hashedPassword);
+  
+  const updatedUser  = await User.findByIdAndUpdate(user._id,{password: hashedPassword })
+    console.log(updatedUser );
+   res.status(200).json({ message: "Password updated successfully"});
+    
+}
+
+
 exports.getProfile = async (req, res) => {
 
   try {
@@ -164,9 +182,10 @@ exports.addAppointment = async (req, res) => {
 
 
     // sen user mail
-    await sendMail(
-      req.user.email,
-      "Appointment Booked",
+   
+await sendMail(
+  req.user.email,
+  "Appointment Booked",
       `Your appointment is confirmed
       Doctor: ${doctor.name}
       Hospital: ${hospital.hospitalName}
@@ -177,10 +196,10 @@ exports.addAppointment = async (req, res) => {
 
 
 
-    await sendMail(
-      doctor.email,
+   await sendMail(
+  doctor.email,
       "New Appointment",
-      `You have a new appointment
+  `You have a new appointment
       Patient: ${req.user.name}
       Date: ${appointmentDate}
       Time: ${appointmentTime}`

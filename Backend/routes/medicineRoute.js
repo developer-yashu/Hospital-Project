@@ -11,6 +11,7 @@ router.post("/add-medicine",auth,MedicineController.addMedicine);
 router.get("/get-medicines",auth,MedicineController.getMedicines);
 
 router.get("/doctor-medicines",auth,MedicineController.getDoctorMedicines);
+router.get("/lab-tests",auth,MedicineController.getLabTests);
 
 
 

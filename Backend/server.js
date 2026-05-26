@@ -55,7 +55,7 @@ const TestReportRoute=require('./routes/TestReportRoute')
 app.use("/TestReport", TestReportRoute);
 
 app.listen(Port, () => {
-  console.log(`Server running on ${Port}`);
+  console.log(`Hospital  Server running on ${Port}`);
 });
 
 

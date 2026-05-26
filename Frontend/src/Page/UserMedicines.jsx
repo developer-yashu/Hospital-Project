@@ -92,14 +92,14 @@ const UserMedicines = () => {
                 {item.nextAppointmentDate?.split("T")[0]}
               </span>
             </p>
-{/* 
+
             <p>
-              📝 Description :
+              📝 Test :
               <span className="font-bold">
                 {" "}
-                {item.description}
+                {item.testId.testName}
               </span>
-            </p> */}
+            </p>
 
           </div>
         ))}

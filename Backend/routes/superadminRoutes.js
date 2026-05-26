@@ -11,6 +11,9 @@ router.post("/create-superadmin",superadmincontrollers.createSuperAdmin);
 router.post("/superadmin-login",superadmincontrollers.login);
 router.post("/reset-Password",superadmincontrollers.resetPassword);
 router.post("/signup",superadmincontrollers.signup);
+router.post("/Forget",superadmincontrollers.Forget);
+
+
 
 
 router.get("/get-profile",auth,superadmincontrollers.getProfile);
