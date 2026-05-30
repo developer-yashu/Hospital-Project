@@ -51,9 +51,18 @@ exports.addHospital = async (req, res) => {
 
 //get all hospitals
 exports.getAllHospital = async (req, res) => {
+  
+  // const page=parseInt(req.query.page)|| 1;
+    // const limit=parseInt(req.query.limit) || 4;
+    // const skip = (page-1)*limit
+  
+  
   try {
     const { search = "" } = req.query;
     console.log(search);
+
+   
+
     // const hospitals = await Hospital.find()
     const hospitals = await Hospital.find({
       hospitalName: {
@@ -64,8 +73,14 @@ exports.getAllHospital = async (req, res) => {
       .populate("stateId", "state")
       .populate("districtId", "district")
       .populate("CityId", "city")
+      // .skip(skip).limit(limit)
+      // .Hospital.countDocuments();
 
-    res.status(200).json({ hospitals });
+
+
+      res.status(200).json({ hospitals, });
+
+
   } catch (error) {
     res.status(500).json({ message: error.message })
   }

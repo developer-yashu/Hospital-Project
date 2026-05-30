@@ -45,8 +45,6 @@
 //     }
 //   };
 
-
-
 //  const LabTest = async () => {
 //   try {
 //     const token = localStorage.getItem("token");
@@ -68,9 +66,6 @@
 //     console.log("ERROR:", error.response?.data);
 //   }
 // };
-
-
-
 
 //   useEffect(() => {
 //     getTests();
@@ -217,45 +212,84 @@
 
 
 
+
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import {
-  TestTube,
+import {TestTube} from "lucide-react";
   // IndianRupee,
   // Building2,
   // ShieldAlert,
-} from "lucide-react";
 
 const TestDashboard = () => {
-
   const token = localStorage.getItem("token");
-
   const [tests, setTests] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  const [showPopup, setShowPopup] = useState(false);
+
+  const [selectedTestId, setSelectedTestId] = useState("");
+
+  const [description, setDescription] = useState("");
+
+  const [reportImage, setReportImage] = useState(null);
+
   const LabTest = async () => {
     try {
-
       setLoading(true);
 
-      const res = await axios.get(
-        "http://127.0.0.1:1010/Medicine/lab-tests",
+      const res = await axios.get("http://127.0.0.1:1010/Medicine/lab-tests", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      console.log("LAB TESTS:", res.data.tests);
+      setTests(res.data.tests);
+      setLoading(false);
+    } catch (error) {
+      console.log(error.response?.data);
+      setLoading(false);
+    }
+  };
+
+  const updateReached = async (id) => {
+    try {
+      const res = await axios.put(
+        `http://127.0.0.1:1010/TestReport/update-rejected/${id}`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } },
+      );
+      alert(res.data.message);
+      LabTest();
+    } catch (error) {
+      console.log(error);
+      alert(error.response?.data?.message);
+    }
+  };
+
+  const addReport = async (e) => {
+    e.preventDefault();
+
+    try {
+      const formData = new FormData();
+      formData.append("testId", selectedTestId);
+      formData.append("description", description);
+      formData.append("reportImage", reportImage);
+
+      const res = await axios.post(
+        "http://127.0.0.1:1010/TestReport/add-test-report",
+        formData,
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
           },
-        }
+        },
       );
 
-      console.log("LAB TESTS:", res.data.tests);
-
-      setTests(res.data.tests);
-
-      setLoading(false);
-
+      alert(res.data.message);
+      setShowPopup(false);
+      LabTest();
     } catch (error) {
-      console.log(error.response?.data || error.message);
-      setLoading(false);
+      console.log(error);
+        alert(error.response?.data?.message);
     }
   };
 
@@ -265,12 +299,9 @@ const TestDashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
-
       <div className="flex items-center gap-3 mb-8">
         <TestTube className="text-blue-600" size={34} />
-        <h1 className="text-3xl font-bold text-gray-800">
-          Lab Assigned Tests
-        </h1>
+        <h1 className="text-3xl font-bold text-gray-800">Lab Assigned Tests</h1>
       </div>
 
       {loading ? (
@@ -282,31 +313,74 @@ const TestDashboard = () => {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
           {tests?.map((item) => (
             <div key={item._id} className="bg-white p-5 rounded-2xl shadow">
-
-              <h2 className="text-xl font-bold">
-                {item.testId?.testName}
-              </h2>
+              <h2 className="text-xl font-bold">{item.testId?.testName}</h2>
 
               <p>👤 Patient: {item.userId?.name}</p>
               <p>👨‍⚕️ Doctor: {item.doctorId?.name}</p>
 
-              <p className="text-green-700 font-bold">
-                ₹{item.testId?.charge}
-              </p>
+              <p className="text-green-700 font-bold">₹{item.testId?.charge}</p>
 
               <p className="text-sm text-gray-600">
                 {item.testId?.precautions}
               </p>
 
+              <p className="text-sm text-gray-600">
+                Status :{item.isRejected ? "true" : "false"}
+              </p>
+              {/* <button onClick={() => updateReached(item._id)}>isRejected</button> */}
+              {!item.isRejected ? (
+                <button
+                  onClick={() => updateReached(item._id)}
+                  className="bg-red-600 text-white px-4 py-2 rounded"
+                >
+                  Reject
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    setShowPopup(true);
+                    setSelectedTestId(item.testId?._id);
+                  }}
+                  className="bg-blue-600 text-white px-4 py-2 rounded"
+                >
+                  Add Report
+                </button>
+              )}
             </div>
           ))}
-
         </div>
       )}
 
+      {showPopup && (
+        <div className="fixed inset-0 bg-black/40 flex justify-center items-center">
+          <div className="bg-white p-6 rounded-xl w-[400px]">
+            <h1 className="text-2xl font-bold mb-4">Upload Report</h1>
+
+            <form onSubmit={addReport}>
+              <textarea
+                placeholder="Description"
+                className="border w-full p-3 rounded mb-3"
+                onChange={(e) => setDescription(e.target.value)}
+              />
+
+              <input
+                type="file"
+                className="mb-3"
+                onChange={(e) => setReportImage(e.target.files[0])}
+              />
+
+              <button
+                type="submit"
+                className="bg-blue-600 text-white px-4 py-2 rounded"
+              >
+                Submit Report
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -39,96 +39,204 @@ const Doctordashboard = () => {
   }, []);
 
 return (
-  <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-cyan-50 p-6">
+  <div className="min-h-screen bg-gradient-to-br from-sky-50 via-white to-cyan-100 p-6">
 
     {/* HEADER */}
-    <div className="text-center mb-10">
-      <h1 className="text-4xl font-extrabold text-blue-700">
-        🩺 Doctor Dashboard
-      </h1>
+    <div className="bg-white rounded-3xl shadow-lg p-8 mb-10 border border-blue-100">
+      <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
 
-           <Link
-                    to="/AppointmentHistory"
-                    className="px-6 py-3 rounded-xl bg-green-600 text-white font-semibold shadow-lg hover:bg-green-700"
-                  >
-                    👨‍⚕️AppointmentHistory
-                  </Link>
-      <p className="text-gray-500 mt-2">
-        Manage Tests & Labs efficiently
-      </p>
+        <div>
+          <h1 className="text-5xl font-extrabold text-blue-700 tracking-wide">
+            🩺 Doctor Dashboard
+          </h1>
+
+          <p className="text-gray-500 mt-3 text-lg">
+            Manage Labs & Medical Tests Easily
+          </p>
+        </div>
+
+        <Link
+          to="/AppointmentHistory"
+          className="px-8 py-4 rounded-2xl bg-gradient-to-r from-green-500 to-green-700 
+          text-white font-bold shadow-lg hover:scale-105 transition duration-300"
+        >
+          👨‍⚕️ Appointment History
+        </Link>
+
+      </div>
     </div>
 
-    {/* TESTS SECTION */}
-    <h2 className="text-2xl font-bold text-blue-600 mb-4">
-      🧪 Available Tests
-    </h2>
+    {/* TEST SECTION */}
+    <div className="mb-14">
 
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-
-      {tests.map((test) => (
-        <div
-          key={test._id}
-          className="bg-white rounded-2xl shadow-md p-6 border border-gray-100 
-                     hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
-        >
-
-          <h3 className="text-xl font-bold text-blue-700 mb-2">
-            🧪 {test.testName}
-          </h3>
-
-          <p className="text-gray-600 mb-1">
-            💰 Charge:
-            <span className="font-semibold text-green-600 ml-2">
-              ₹{test.charge}
-            </span>
-          </p>
-
-          <p className="text-gray-500 text-sm">
-            📝 {test.precautions}
-          </p>
-
+      <div className="flex items-center gap-3 mb-6">
+        <div className="w-12 h-12 rounded-2xl bg-blue-100 flex items-center justify-center text-2xl">
+          🧪
         </div>
-      ))}
 
+        <h2 className="text-3xl font-extrabold text-blue-700">
+          Available Tests
+        </h2>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-7">
+
+        {tests.map((test) => (
+          <div
+            key={test._id}
+            className="bg-white rounded-3xl overflow-hidden border border-gray-100 
+            shadow-md hover:shadow-2xl transition duration-300"
+          >
+
+            {/* CARD TOP */}
+            <div className="bg-gradient-to-r from-blue-600 to-cyan-500 p-5 text-white">
+              <h3 className="text-2xl font-bold">
+                🧪 {test.testName}
+              </h3>
+
+              <p className="text-sm opacity-90 mt-1">
+                Medical Test Information
+              </p>
+            </div>
+
+            {/* BODY */}
+            <div className="p-5 space-y-4">
+
+              <div className="flex justify-between items-center bg-green-50 p-4 rounded-2xl border border-green-100">
+                <span className="font-semibold text-gray-700">
+                  💰 Charge
+                </span>
+
+                <span className="text-xl font-extrabold text-green-600">
+                  ₹{test.charge}
+                </span>
+              </div>
+
+              <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-2xl">
+                <h4 className="font-bold text-yellow-700 mb-2">
+                  ⚠ Precautions
+                </h4>
+
+                <p className="text-sm text-gray-700 leading-relaxed">
+                  {test.precautions}
+                </p>
+              </div>
+
+              <div className="flex justify-between items-center bg-blue-50 p-4 rounded-2xl border border-blue-100">
+                <span className="font-semibold text-gray-700">
+                  🏥 Department
+                </span>
+
+                <span className="font-bold text-blue-700">
+                  {test.departmentId?.departmentName}
+                </span>
+              </div>
+
+              <div className="flex justify-between items-center">
+
+                <span className="font-semibold text-gray-700">
+                  Status
+                </span>
+
+                <span
+                  className={`px-4 py-1 rounded-full text-sm font-bold ${
+                    test.status === "active"
+                      ? "bg-green-100 text-green-700"
+                      : "bg-red-100 text-red-700"
+                  }`}
+                >
+                  {test.status}
+                </span>
+
+              </div>
+            </div>
+          </div>
+        ))}
+
+      </div>
     </div>
 
-    {/* LABS SECTION */}
-    <h2 className="text-2xl font-bold text-blue-600 mb-4">
-      🏥 Available Labs
-    </h2>
+    {/* LAB SECTION */}
+    <div>
 
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-      {labs.map((lab) => (
-        <div
-          key={lab._id}
-          className="bg-white rounded-2xl shadow-md p-6 border border-gray-100 
-                     hover:shadow-2xl hover:-translate-y-1 transition-all duration-300"
-        >
-
-          <h3 className="text-xl font-bold text-blue-700 mb-2">
-            🧪 {lab.labName}
-          </h3>
-
-          <p className="text-gray-600 mb-1">
-            📧 {lab.email}
-          </p>
-
-          <p className="text-gray-600 mb-1">
-            📞 {lab.phone}
-          </p>
-
-          <p className="text-sm">
-            Status:
-            <span className="ml-2 px-3 py-1 rounded-full text-white text-xs 
-                             bg-green-500">
-              {lab.status}
-            </span>
-          </p>
-
+      <div className="flex items-center gap-3 mb-6">
+        <div className="w-12 h-12 rounded-2xl bg-cyan-100 flex items-center justify-center text-2xl">
+          🏥
         </div>
-      ))}
 
+        <h2 className="text-3xl font-extrabold text-cyan-700">
+          Available Labs
+        </h2>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-7">
+
+        {labs.map((lab) => (
+          <div
+            key={lab._id}
+            className="bg-white rounded-3xl overflow-hidden border border-gray-100 
+            shadow-md hover:shadow-2xl transition duration-300"
+          >
+
+            {/* TOP */}
+            <div className="bg-gradient-to-r from-cyan-500 to-blue-600 p-5 text-white">
+
+              <div className="flex items-center gap-4">
+
+                <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center text-3xl">
+                  🧪
+                </div>
+
+                <div>
+                  <h3 className="text-2xl font-bold">
+                    {lab.labName}
+                  </h3>
+
+                  <p className="text-sm opacity-90">
+                    Laboratory Details
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* BODY */}
+            <div className="p-5 space-y-4">
+
+              <div className="bg-gray-50 p-4 rounded-2xl border">
+                <p className="text-gray-700">
+                  📧 {lab.email}
+                </p>
+              </div>
+
+              <div className="bg-gray-50 p-4 rounded-2xl border">
+                <p className="text-gray-700">
+                  📞 {lab.phone}
+                </p>
+              </div>
+
+              <div className="flex justify-between items-center">
+
+                <span className="font-semibold text-gray-700">
+                  Status
+                </span>
+
+                <span
+                  className={`px-4 py-1 rounded-full text-sm font-bold ${
+                    lab.status === "active"
+                      ? "bg-green-100 text-green-700"
+                      : "bg-red-100 text-red-700"
+                  }`}
+                >
+                  {lab.status}
+                </span>
+
+              </div>
+
+            </div>
+          </div>
+        ))}
+
+      </div>
     </div>
 
   </div>

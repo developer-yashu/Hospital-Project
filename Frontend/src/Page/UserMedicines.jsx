@@ -94,10 +94,10 @@ const UserMedicines = () => {
             </p>
 
             <p>
-              📝 Test :
+              {/* 📝 Test : */}
               <span className="font-bold">
                 {" "}
-                {item.testId.testName}
+                {/* {item.testId.testName} */}
               </span>
             </p>
 

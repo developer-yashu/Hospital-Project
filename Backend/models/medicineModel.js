@@ -54,6 +54,10 @@ const medicineSchema = new mongoose.Schema(
       enum: ["available", "out_of_stock"],
       default: "available",
     },
+    isRejected: {
+   type: Boolean,
+   default: false,
+}
   },
   {
     timestamps: true,
