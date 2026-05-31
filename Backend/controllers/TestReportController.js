@@ -31,23 +31,24 @@ exports.addTestReport = async (req, res) => {
 };
 
 exports.updateRejected = async (req, res) => {
-  try {
+    try {
 
-    const { id } = req.params;
-    const updatedMedicine  = await medicine.findByIdAndUpdate(id,{ isRejected: true },{ new: true });
-    if (!updatedMedicine ) {
-      return res.status(404).json({ message: "Medicine not found"});
+        const { id } = req.params;
+        const updatedMedicine = await medicine.findByIdAndUpdate(id, { isRejected: true }, { new: true });
+        if (!updatedMedicine) {
+            return res.status(404).json({ message: "Medicine not found" });
+        }
+        return res.status(200).json({ message: "Patient reached successfully", updatedMedicine });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
     }
-     return res.status(200).json({message: "Patient reached successfully",updatedMedicine});
-  } catch (error) {
-    return res.status(500).json({message: error.message});
-  }
 };
 
 
 exports.getTestReport = async () => {
     try {
-
+        const data = await TestReport.find();
+        return res.status(202).json({message:"TestReport data",data})
     } catch (error) {
         return res.status(500).json({ message: "Server error" });
     }

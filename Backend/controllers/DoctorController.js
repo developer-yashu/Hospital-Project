@@ -1,7 +1,6 @@
 const Doctor = require("../models/Doctor.Model");
 const DoctorImage = require("../models/DoctorimageModel");
 
-
 const User = require("../models/userModel");
 const sendMail = require("../utils/sendMail");
 const bcrypt = require("bcrypt");
